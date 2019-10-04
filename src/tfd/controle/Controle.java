@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import tfd.visao.FrmPrincipal;
 
 /**
  *
@@ -21,6 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Controle {
     
     public static Controle instanceSingleton = null;
+    private static FrmPrincipal principal = null;
     
     private Controle(){
     }
@@ -43,6 +45,7 @@ public class Controle {
             System.exit(0);
         }
         
-        JOptionPane.showMessageDialog(null, "Testando...");
+        principal = new FrmPrincipal();
+        principal.setVisible(true);
     }
 }
