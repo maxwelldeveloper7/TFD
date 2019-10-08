@@ -1,6 +1,6 @@
 package tfd.visao;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -15,7 +15,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -82,12 +81,13 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         
         //Definindo Paineis
         pnBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 60, 0));
-        
+        pnBotoes.setBackground(Color.GRAY);
         pnBotoes.add(btAgenda);
         pnBotoes.add(btLiberacao);
-        pnBotoes.setBounds(0, 200, 780, 400);
+        pnBotoes.setBounds(0, 200, 795, 75);
         
         pnFundo = new JPanel();
+        pnFundo.setBackground(Color.GRAY);
         pnFundo.setLayout(null);
         pnFundo.add(pnBotoes);
         
