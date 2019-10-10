@@ -6,6 +6,8 @@
 
 package tfd;
 
+import javax.swing.JOptionPane;
+import javax.swing.text.DefaultStyledDocument;
 import tfd.controle.Controle;
 
 /**
@@ -18,7 +20,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Controle.inicializar();
+        JOptionPane.showMessageDialog(null, "Testando github");
     }
     
 }
