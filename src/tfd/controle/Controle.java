@@ -47,7 +47,8 @@ public class Controle {
                     "/n"+ex.getMessage()+"/nA aplicação será encerrada.");
             System.exit(0);
         }*/
-        
+        FrmPrincipal p = new FrmPrincipal();
+        p.setVisible(true);
         motoristas = new FrmMotoristas();
         motoristas.setVisible(true);
     }
