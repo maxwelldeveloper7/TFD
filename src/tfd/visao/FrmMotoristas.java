@@ -60,10 +60,24 @@ public class FrmMotoristas extends JDialog{
 
     //Inicializando, definindo e posicionando componentes
     private void construirComponentes() {
+      //painel que conterá a tabela
       pnTabela = new JPanel(null);
       pnTabela.setBounds(4, 4, 786, 200);
-      bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"Motoristas");
+      bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),"Listagem de Motoristas");
       pnTabela.setBorder(bordaTabela);
+      
+      //construindo tabela
+      tabela = new JTable(modelo);
+      modelo.addColumn("ID");
+      modelo.addColumn("Motorista");
+      modelo.addColumn("Telafone");
+      tabela.getColumnModel().getColumn(0).setPreferredWidth(5);
+      pesquisar(modelo);
+      barraRolagem = new JScrollPane(tabela);
+      barraRolagem.setBounds(0, 0, 786, 200);
+      pnTabela.add(barraRolagem);
+      
+      
       
       pnDados = new JPanel(null);
       pnDados.setBounds(4, 208, 786, 100);
@@ -81,5 +95,11 @@ public class FrmMotoristas extends JDialog{
       pnFundo.add(pnBotoes);
       pnFundo.setBackground(Color.gray);
       getContentPane().add(pnFundo);
+    }
+
+    private void pesquisar(DefaultTableModel modelo) {
+        modelo.setNumRows(0);
+        //DAO a implementar
+        modelo.addRow(new Object[]{"1","Robinho","33-3621-4545"});
     }
 }
