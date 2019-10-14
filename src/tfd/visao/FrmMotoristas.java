@@ -2,6 +2,7 @@ package tfd.visao;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -10,6 +11,7 @@ import java.text.ParseException;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -39,7 +41,7 @@ public class FrmMotoristas extends JDialog {
     private JMenuItem mnuContato;
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
-    private JButton btEditar, btAgendar, btVisualizar;
+    private JButton btInserir, btAtualizar, btSalvar, btCancelar, btExcluir;
     private Icon icoAgendar, icoEditar, icoVisualizar, icoContato;
     private JTextField txId, txMotorista;
     private JFormattedTextField txTelefone;
@@ -57,7 +59,7 @@ public class FrmMotoristas extends JDialog {
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
-        setBounds((screenSize.width - 800) / 2, (screenSize.height - 400) / 2, 800, 400);//define o tamanho da janela e posiciona ao centro
+        setBounds((screenSize.width - 800) / 2, (screenSize.height - 364) / 2, 800, 364);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
         construirComponentes();
@@ -79,12 +81,12 @@ public class FrmMotoristas extends JDialog {
         tabela.getColumnModel().getColumn(0).setPreferredWidth(5);
         pesquisar(modelo);
         barraRolagem = new JScrollPane(tabela);
-        barraRolagem.setBounds(0, 0, 786, 200);
+        barraRolagem.setBounds(5, 17, 776, 178);
         pnTabela.add(barraRolagem);
 
         //Painel que conterá o formulário de dados
         pnDados = new JPanel(null);
-        pnDados.setBounds(4, 208, 786, 100);
+        pnDados.setBounds(4, 208, 786, 80);
         bordaDados = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Dados");
         pnDados.setBorder(bordaDados);
 
@@ -123,9 +125,15 @@ public class FrmMotoristas extends JDialog {
         txTelefone.setEnabled(false);
         pnDados.add(txTelefone);
 
-        pnBotoes = new JPanel(null);
-        pnBotoes.setBounds(4, 308, 786, 50);
-        pnBotoes.setBorder(BorderFactory.createEtchedBorder());
+        
+        //Construindo painel de botões
+        pnBotoes = new JPanel(new FlowLayout());
+        pnBotoes.setBounds(4, 292, 786, 40);
+        
+        //Contruindo botões
+        
+        btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/insert.png")));
+        pnBotoes.add(btInserir);
 
         pnFundo = new JPanel(null);
         pnFundo.add(pnTabela);
