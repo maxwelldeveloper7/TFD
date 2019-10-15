@@ -132,8 +132,11 @@ public class FrmMotoristas extends JDialog {
         
         //Contruindo botões
         
-        btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/insert.png")));
+        btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
         pnBotoes.add(btInserir);
+        
+        btAtualizar = new JButton("Editar", new ImageIcon(getClass().getResource("/tfd/visao/editar.png")));
+        pnBotoes.add(btAtualizar);
 
         pnFundo = new JPanel(null);
         pnFundo.add(pnTabela);
