@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -28,6 +29,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
+import tfd.Utilidades.Utilidades;
+import tfd.controle.Controle;
 
 /**
  *
@@ -42,18 +45,18 @@ public class FrmMotoristas extends JDialog {
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
     private JButton btInserir, btAtualizar, btSalvar, btCancelar, btExcluir;
-    private Icon icoAgendar, icoEditar, icoVisualizar, icoContato;
+    private JComboBox cbStatus;
     private JTextField txId, txMotorista;
     private JFormattedTextField txTelefone;
-    private JLabel lbId, lbMotorista, lbTelefone;
+    private JLabel lbId, lbMotorista, lbTelefone, lbStatus;
     private MaskFormatter ftmtelefone;
-    private DefaultTableModel modelo = new DefaultTableModel();
+    private DefaultTableModel modelo;
     private JTable tabela;
     private JScrollPane barraRolagem;
     private Timestamp idAgendamento;
 
     //Método construtor
-    public FrmMotoristas() {
+    public FrmMotoristas() {        
         setTitle("Cadastro de Motoristas");//define o título
         URL url = this.getClass().getResource("/tfd/visao/favicon.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
@@ -62,6 +65,13 @@ public class FrmMotoristas extends JDialog {
         setBounds((screenSize.width - 800) / 2, (screenSize.height - 364) / 2, 800, 364);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
+        //impossibilita edição da tabela
+        this.modelo = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
         construirComponentes();
     }
 
@@ -78,6 +88,7 @@ public class FrmMotoristas extends JDialog {
         modelo.addColumn("ID");
         modelo.addColumn("Motorista");
         modelo.addColumn("Telafone");
+        modelo.addColumn("Status");
         tabela.getColumnModel().getColumn(0).setPreferredWidth(5);
         pesquisar(modelo);
         barraRolagem = new JScrollPane(tabela);
@@ -125,10 +136,21 @@ public class FrmMotoristas extends JDialog {
         txTelefone.setEnabled(false);
         pnDados.add(txTelefone);
 
+        lbStatus = new JLabel("Status:");
+        lbStatus.setBounds(520, 20, 120, 20);
+        pnDados.add(lbStatus);
+        
+        cbStatus = new JComboBox();
+        cbStatus.addItem("");
+        cbStatus.addItem("Ativo");
+        cbStatus.addItem("Inativo");
+        cbStatus.setBounds(520, 40, 120, 20);
+        cbStatus.setEnabled(false);
+        pnDados.add(cbStatus);
         
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
-        pnBotoes.setBounds(4, 292, 786, 40);
+        pnBotoes.setBounds(4, 292, 786, 38);
         
         //Contruindo botões
         
@@ -137,6 +159,17 @@ public class FrmMotoristas extends JDialog {
         
         btAtualizar = new JButton("Editar", new ImageIcon(getClass().getResource("/tfd/visao/editar.png")));
         pnBotoes.add(btAtualizar);
+        
+        btExcluir = new JButton("Excluir", new ImageIcon(getClass().getResource("/tfd/visao/deletar.png")));
+        pnBotoes.add(btExcluir);
+        
+        btSalvar = new JButton("Salvar", new ImageIcon(getClass().getResource("/tfd/visao/salvar.png")));
+        pnBotoes.add(btSalvar);
+        
+        btCancelar = new JButton("Cancelar", new ImageIcon(getClass().getResource("/tfd/visao/cancelar.png")));
+        pnBotoes.add(btCancelar);
+                
+        pnBotoes.setBackground(Color.gray);
 
         pnFundo = new JPanel(null);
         pnFundo.add(pnTabela);
@@ -149,6 +182,6 @@ public class FrmMotoristas extends JDialog {
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         //DAO a implementar
-        modelo.addRow(new Object[]{"1", "Robinho", "33-3621-4545"});
+        modelo.addRow(new Object[]{"1", "Robinho", Utilidades.formataStringMascara("33988117010", "(##)#####-####"),"Ativo"});
     }
 }

@@ -7,7 +7,10 @@ import java.math.BigDecimal;
 import java.text.*;
 import java.util.*;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
 
 /**
  * Autor: Maxwell de Oliveira Chaves
@@ -347,5 +350,18 @@ public class Utilidades {
         
         System.out.println(host);
         return host;
+    }
+    
+    public static String formataStringMascara(String texto, String mascara){
+        MaskFormatter mf;
+        String result = "";
+        try {
+            mf = new MaskFormatter(mascara);
+            mf.setValueContainsLiteralCharacters(false);            
+            result = mf.valueToString(texto);
+        } catch (ParseException ex) {
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);            
+        }       
+        return result;
     }
 }
