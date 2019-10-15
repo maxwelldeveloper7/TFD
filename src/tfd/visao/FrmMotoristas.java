@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,7 +30,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
-import tfd.Utilidades.Utilidades;
+import tfd.modelo.MotoristaBean;
 
 /**
  *
@@ -45,11 +47,12 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     private JFormattedTextField txTelefone;
     private JLabel lbId, lbMotorista, lbTelefone, lbStatus;
     private MaskFormatter ftmtelefone;
-    private DefaultTableModel modelo;
+    private final DefaultTableModel modelo;
     private ListSelectionModel lms;
-    private int linhaSelecionada = -1;
     private JTable tabela;
     private JScrollPane barraRolagem;
+    private MotoristaBean m1;
+    List<MotoristaBean> motoristas;
     
 
     //Método construtor
@@ -197,19 +200,33 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         //DAO a implementar
-        //modelo.addRow(new Object[]{"1", "Robinho", Utilidades.formataStringMascara("33988117010", "(##)#####-####"),"Ativo"});
-        //modelo.addRow(new Object[]{"1", "Robinho", Utilidades.formataStringMascara("33988117010", "(##)#####-####"),"Ativo"});
+        
+        m1 = new MotoristaBean(1, "Maxwell", "33988117010", true);
+        
+        motoristas = new ArrayList<>();
+        motoristas.add(m1);
         
         String[] campos = {null, null, null, null};
+        
+        for (int i = 0; i < motoristas.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(motoristas.get(i).getId(), i, 0);
+            modelo.setValueAt(motoristas.get(i).getNomeMotorista(), i, 1);
+            modelo.setValueAt(motoristas.get(i).getTelefoneMask(), i, 2);
+            modelo.setValueAt(motoristas.get(i).getAtivo(), i, 3);            
+        }
     }
     
     private void linhaSelecionadaTabela(){
-        linhaSelecionada = tabela.getSelectedRow();
         if(tabela.getSelectedRow() != -1){
-            
+            txId.setText(motoristas.get(tabela.getSelectedRow()).getIdStr());
+            txMotorista.setText(motoristas.get(tabela.getSelectedRow()).getNomeMotorista());
+            txTelefone.setText(motoristas.get(tabela.getSelectedRow()).getTelefoneMask());
+            cbStatus.setSelectedItem(motoristas.get(tabela.getSelectedRow()).getAtivo());
             habilitarEdicaoExclusao(true);
         }else{
             habilitarEdicaoExclusao(false);
+            limparDados();
         }
     }
     
@@ -225,6 +242,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         txTelefone.setEnabled(habilitar);
         cbStatus.setEnabled(habilitar); 
         tabela.setEnabled(!habilitar);
+        txMotorista.requestFocus();
     }
     
     private void resetarFormulario(){
@@ -245,7 +263,8 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     }
     
     private void salvar(){
-        //implementar salvar
+        MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
+        System.out.println(m.getNomeMotorista()+m.getTelefone()+m.getAtivo())
         resetarFormulario();
     }
     
@@ -295,6 +314,4 @@ public class FrmMotoristas extends JDialog implements ActionListener{
             resetarFormulario();
         }
     }
-    
-    
 }

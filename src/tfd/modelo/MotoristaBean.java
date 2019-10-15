@@ -6,6 +6,8 @@
 
 package tfd.modelo;
 
+import tfd.Utilidades.Utilidades;
+
 /**
  *
  * @author Developer
@@ -27,9 +29,19 @@ public class MotoristaBean {
         this.telefone = telefone;
         this.ativo = ativo;
     }
+    
+    public MotoristaBean(String nomeMotorista, String telefone, String ativo) {
+        this.nomeMotorista = nomeMotorista;
+        this.telefone = telefone;
+        this.setAtivo(ativo);
+    }
 
     public int getId() {
         return id;
+    }
+    
+    public String getIdStr(){
+        return Integer.toString(id);
     }
 
     public void setId(int id) {
@@ -47,6 +59,10 @@ public class MotoristaBean {
     public String getTelefone() {
         return telefone;
     }
+    
+    public String getTelefoneMask(){
+        return Utilidades.formataStringMascara(telefone, "(##)#####-####");
+    }
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
@@ -55,12 +71,24 @@ public class MotoristaBean {
     public boolean isAtivo() {
         return ativo;
     }
+    
+    public String getAtivo() {
+        if(ativo){
+            return "Ativo";
+        }else{
+            return "Inativo";
+        }
+    }
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
     
-    
-    
-    
+    public final void setAtivo(String arg){
+        if(arg.equals("Ativo")){
+            this.ativo = true;
+        }else{
+            this.ativo = false;
+        }
+    }
 }
