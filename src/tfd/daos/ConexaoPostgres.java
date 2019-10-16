@@ -47,8 +47,9 @@ public class ConexaoPostgres {
         } catch (IOException ex) {
             Logger.getLogger(ConexaoPostgres.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         url = "jdbc:postgresql://" + prop.getProperty("host") + ":" + prop.getProperty("porta") + "/tfd";
-        System.out.println(url);
+        
         try {
             Class.forName(DRIVER);
             con = DriverManager.getConnection(url, USER, PASSWORD);

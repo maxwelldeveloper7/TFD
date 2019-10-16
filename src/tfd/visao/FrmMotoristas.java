@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -24,10 +23,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import tfd.daos.MotoristaDao;
@@ -52,7 +53,6 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private MotoristaBean m1;
     private List<MotoristaBean> motoristas;
     public Integer dml;
     
@@ -60,7 +60,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     //Método construtor
     public FrmMotoristas() {        
         setTitle("Cadastro de Motoristas");//define o título
-        URL url = this.getClass().getResource("/tfd/visao/favicon.png");//caminho para arquivo
+        URL url = this.getClass().getResource("/tfd/visao/carro.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
@@ -91,9 +91,21 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
         modelo.addColumn("Motorista");
-        modelo.addColumn("Telafone");
-        modelo.addColumn("Status");        
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(5);  
+        modelo.addColumn("Telefone");
+        modelo.addColumn("Status"); 
+        //tabela.setAutoResizeMode(0);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(58); 
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(400);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(200);
+        DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
+        direita.setHorizontalAlignment(SwingConstants.RIGHT);
+        DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
+        esquerda.setHorizontalAlignment(SwingConstants.LEFT);
+        DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
+        centro.setHorizontalAlignment(SwingConstants.CENTER);
+        tabela.getColumnModel().getColumn(0).setCellRenderer(direita);
+        tabela.getColumnModel().getColumn(2).setCellRenderer(centro);
+        tabela.getColumnModel().getColumn(3).setCellRenderer(centro);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//seleciona apenas uma linha
         lms = tabela.getSelectionModel();
         lms.addListSelectionListener(new ListSelectionListener() {
@@ -197,23 +209,19 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         btCancelar.addActionListener(this);
     }
 
-    //tratando eventos
-    
+    //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        //DAO a implementar
+        MotoristaDao dao = new MotoristaDao();
         
-        m1 = new MotoristaBean(1, "Maxwell", "33988117010", true);
-        
-        motoristas = new ArrayList<>();
-        motoristas.add(m1);
+        motoristas = dao.listar();
         
         String[] campos = {null, null, null, null};
         
         for (int i = 0; i < motoristas.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(motoristas.get(i).getId(), i, 0);
-            modelo.setValueAt(motoristas.get(i).getNomeMotorista(), i, 1);
+            modelo.setValueAt(motoristas.get(i).getId()+"  ", i, 0);
+            modelo.setValueAt("  "+motoristas.get(i).getNomeMotorista(), i, 1);
             modelo.setValueAt(motoristas.get(i).getTelefoneMask(), i, 2);
             modelo.setValueAt(motoristas.get(i).getAtivo(), i, 3);            
         }
@@ -255,6 +263,8 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
+        motoristas = null;
+        dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
     }
@@ -271,14 +281,24 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         if(dml == 1){
             MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
             if(dao.inserir(m)){
-                JOptionPane.showMessageDialog(this, "Salvo com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+        if(dml == 2){
+            MotoristaBean m = new MotoristaBean(Integer.parseInt(txId.getText()), txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
+            if(dao.alterar(m)){
+                JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
             }
         }
         resetarFormulario();
     }
     
     private void excluir(){
-        //implementar excluir
+        MotoristaDao dao = new MotoristaDao();
+        if(dao.excluir(Integer.parseInt(txId.getText().trim()))){
+            JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+        }
         resetarFormulario();
     }
     
@@ -290,18 +310,19 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         btExcluir.setEnabled(false);
         btSalvar.setEnabled(true);
         btCancelar.setEnabled(true);
-        habilitarCampos(true);//habilita campos para edição
+        habilitarCampos(true);//habilita campos para preenchimento
         dml = 1;//seta 1 para inserção quando do acionar o botão salvar
     }
     
     private void editar(){
+        //habilita e desabilita botões necessários
         btInserir.setEnabled(false);
         btEditar.setEnabled(false);
         btExcluir.setEnabled(false);
         btSalvar.setEnabled(true);
         btCancelar.setEnabled(true);
-        habilitarCampos(true);
-        dml = 2;
+        habilitarCampos(true);//habilita campos para edição
+        dml = 2;//seta 2 para alteração quando do acionar o botão salvar
     }
     
     @Override
