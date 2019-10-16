@@ -264,7 +264,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     
     private void salvar(){
         MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
-        System.out.println(m.getNomeMotorista()+m.getTelefone()+m.getAtivo())
+        System.out.println(m.getNomeMotorista()+m.getTelefone()+m.getAtivo())//atributo telefone esta recuperando telefone formatado
         resetarFormulario();
     }
     
