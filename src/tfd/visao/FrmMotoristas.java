@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
@@ -32,6 +34,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
+import tfd.controle.Controle;
 import tfd.daos.MotoristaDao;
 import tfd.modelo.MotoristaBean;
 
@@ -39,7 +42,7 @@ import tfd.modelo.MotoristaBean;
  *
  * @author Maxwell de Oliveira Chaves <maxwellchaves1844@gmail.com>
  */
-public class FrmMotoristas extends JDialog implements ActionListener{
+public class FrmMotoristas extends JDialog implements ActionListener {
 
     //Declarando componentes
     private TitledBorder bordaTabela, bordaDados;
@@ -56,7 +59,6 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     private JScrollPane barraRolagem;
     private List<MotoristaBean> motoristas;
     public Integer dml;
-    
 
     //Método construtor
     public FrmMotoristas(JFrame parent, boolean modal) {
@@ -69,13 +71,15 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         setBounds((screenSize.width - 800) / 2, (screenSize.height - 364) / 2, 800, 364);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
+        
         //impossibilita edição da tabela
-        this.modelo = new DefaultTableModel(){
+        this.modelo = new DefaultTableModel() {
             @Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+        
         construirComponentes();
         habilitarCampos(false);
         resetarFormulario();
@@ -94,9 +98,9 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         modelo.addColumn("ID");
         modelo.addColumn("Motorista");
         modelo.addColumn("Telefone");
-        modelo.addColumn("Status"); 
+        modelo.addColumn("Status");
         //tabela.setAutoResizeMode(0);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(58); 
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(58);
         tabela.getColumnModel().getColumn(1).setPreferredWidth(400);
         tabela.getColumnModel().getColumn(2).setPreferredWidth(200);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
@@ -114,7 +118,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if(!e.getValueIsAdjusting()){
+                if (!e.getValueIsAdjusting()) {
                     linhaSelecionadaTabela();
                 }
             }
@@ -155,7 +159,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txTelefone = new JFormattedTextField(ftmtelefone);
         txTelefone.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txTelefone.setColumns(11);
@@ -165,35 +169,34 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         lbStatus = new JLabel("Status:");
         lbStatus.setBounds(520, 20, 120, 20);
         pnDados.add(lbStatus);
-        
+
         cbStatus = new JComboBox();
         cbStatus.addItem("");
         cbStatus.addItem("Ativo");
         cbStatus.addItem("Inativo");
         cbStatus.setBounds(520, 40, 120, 20);
         pnDados.add(cbStatus);
-        
+
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
         pnBotoes.setBounds(4, 292, 786, 38);
-        
+
         //Contruindo botões
-        
         btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
         pnBotoes.add(btInserir);
-        
+
         btEditar = new JButton("Editar", new ImageIcon(getClass().getResource("/tfd/visao/editar.png")));
         pnBotoes.add(btEditar);
-        
+
         btExcluir = new JButton("Excluir", new ImageIcon(getClass().getResource("/tfd/visao/deletar.png")));
         pnBotoes.add(btExcluir);
-        
+
         btSalvar = new JButton("Salvar", new ImageIcon(getClass().getResource("/tfd/visao/salvar.png")));
         pnBotoes.add(btSalvar);
-        
+
         btCancelar = new JButton("Cancelar", new ImageIcon(getClass().getResource("/tfd/visao/cancelar.png")));
         pnBotoes.add(btCancelar);
-                
+
         pnBotoes.setBackground(Color.gray);
 
         pnFundo = new JPanel(null);
@@ -202,62 +205,101 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         pnFundo.add(pnBotoes);
         pnFundo.setBackground(Color.gray);
         getContentPane().add(pnFundo);
-        
+
         //registrando eventos
         btInserir.addActionListener(this);
         btEditar.addActionListener(this);
         btExcluir.addActionListener(this);
         btSalvar.addActionListener(this);
         btCancelar.addActionListener(this);
+        this.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                 Controle.motoristas = null;
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                
+            }
+        });
     }
+    
+    
 
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         MotoristaDao dao = new MotoristaDao();
-        
+
         motoristas = dao.listar();
-        
+
         String[] campos = {null, null, null, null};
-        
+
         for (int i = 0; i < motoristas.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(motoristas.get(i).getId()+"  ", i, 0);
-            modelo.setValueAt("  "+motoristas.get(i).getNomeMotorista(), i, 1);
+            modelo.setValueAt(motoristas.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + motoristas.get(i).getNomeMotorista(), i, 1);
             modelo.setValueAt(motoristas.get(i).getTelefoneMask(), i, 2);
-            modelo.setValueAt(motoristas.get(i).getAtivo(), i, 3);            
+            modelo.setValueAt(motoristas.get(i).getAtivo(), i, 3);
         }
     }
-    
-    private void linhaSelecionadaTabela(){
-        if(tabela.getSelectedRow() != -1){
+
+    private void linhaSelecionadaTabela() {
+        if (tabela.getSelectedRow() != -1) {
             txId.setText(motoristas.get(tabela.getSelectedRow()).getIdStr());
             txMotorista.setText(motoristas.get(tabela.getSelectedRow()).getNomeMotorista());
             txTelefone.setText(motoristas.get(tabela.getSelectedRow()).getTelefoneMask());
             cbStatus.setSelectedItem(motoristas.get(tabela.getSelectedRow()).getAtivo());
             habilitarEdicaoExclusao(true);
-        }else{
+        } else {
             habilitarEdicaoExclusao(false);
             limparDados();
         }
     }
-    
-    private void limparDados(){
+
+    private void limparDados() {
         txId.setText("");
         txMotorista.setText("");
         txTelefone.setText("");
         cbStatus.setSelectedIndex(0);
     }
-    
-    private void habilitarCampos(boolean habilitar){
+
+    private void habilitarCampos(boolean habilitar) {
         txMotorista.setEnabled(habilitar);
         txTelefone.setEnabled(habilitar);
-        cbStatus.setEnabled(habilitar); 
+        cbStatus.setEnabled(habilitar);
         tabela.setEnabled(!habilitar);
         txMotorista.requestFocus();
     }
-    
-    private void resetarFormulario(){
+
+    private void resetarFormulario() {
         limparDados();
         btInserir.setEnabled(true);
         btEditar.setEnabled(false);
@@ -270,41 +312,48 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         pesquisar(modelo);
         btInserir.requestFocus();
     }
-    
-    private void habilitarEdicaoExclusao(boolean habilitar){
+
+    private void habilitarEdicaoExclusao(boolean habilitar) {
         btInserir.setEnabled(!habilitar);
         btEditar.setEnabled(habilitar);
         btExcluir.setEnabled(habilitar);
     }
-    
-    private void salvar(){
-        
+
+    private void salvar() {
+
         MotoristaDao dao = new MotoristaDao();
-        if(dml == 1){
+        
+        if (dml == 1) {
             MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
-            if(dao.inserir(m)){
-                JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+            if (dao.inserir(m)) {
+                JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
+        if (dml == 2) {
+            MotoristaBean m = new MotoristaBean(Integer.parseInt(txId.getText()), txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
+            if (dao.alterar(m)) {
+                JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         
-        if(dml == 2){
-            MotoristaBean m = new MotoristaBean(Integer.parseInt(txId.getText()), txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
-            if(dao.alterar(m)){
-                JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+        resetarFormulario();
+    }
+
+    private void excluir() {
+        MotoristaDao dao = new MotoristaDao();
+        
+        int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (resposta == 0) {
+            if (dao.excluir(Integer.parseInt(txId.getText().trim()))) {
+                JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         resetarFormulario();
     }
-    
-    private void excluir(){
-        MotoristaDao dao = new MotoristaDao();
-        if(dao.excluir(Integer.parseInt(txId.getText().trim()))){
-            JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
-        }
-        resetarFormulario();
-    }
-    
-    private void inserir(){
+
+    private void inserir() {
         limparDados(); //limpa o formlário para novos registros
         //habilita e desabilita botões necessários
         btInserir.setEnabled(false);
@@ -315,8 +364,8 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         habilitarCampos(true);//habilita campos para preenchimento
         dml = 1;//seta 1 para inserção quando do acionar o botão salvar
     }
-    
-    private void editar(){
+
+    private void editar() {
         //habilita e desabilita botões necessários
         btInserir.setEnabled(false);
         btEditar.setEnabled(false);
@@ -326,26 +375,26 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         habilitarCampos(true);//habilita campos para edição
         dml = 2;//seta 2 para alteração quando do acionar o botão salvar
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == btInserir){
+        if (e.getSource() == btInserir) {
             inserir();
         }
-        
-        if(e.getSource() == btEditar){
+
+        if (e.getSource() == btEditar) {
             editar();
         }
-        
-        if(e.getSource() == btExcluir){
+
+        if (e.getSource() == btExcluir) {
             excluir();
         }
-        
-        if(e.getSource() == btSalvar){
+
+        if (e.getSource() == btSalvar) {
             salvar();
         }
-        
-        if(e.getSource() == btCancelar){
+
+        if (e.getSource() == btCancelar) {
             resetarFormulario();
         }
     }
