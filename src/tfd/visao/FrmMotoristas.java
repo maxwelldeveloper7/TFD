@@ -30,6 +30,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
+import tfd.daos.MotoristaDao;
 import tfd.modelo.MotoristaBean;
 
 /**
@@ -52,7 +53,8 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     private JTable tabela;
     private JScrollPane barraRolagem;
     private MotoristaBean m1;
-    List<MotoristaBean> motoristas;
+    private List<MotoristaBean> motoristas;
+    public Integer dml;
     
 
     //Método construtor
@@ -254,6 +256,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         btCancelar.setEnabled(false);
         habilitarCampos(false);
         pesquisar(modelo);
+        btInserir.requestFocus();
     }
     
     private void habilitarEdicaoExclusao(boolean habilitar){
@@ -263,8 +266,14 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     }
     
     private void salvar(){
-        MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
-        System.out.println(m.getNomeMotorista()+m.getTelefone()+m.getAtivo())//atributo telefone esta recuperando telefone formatado
+        
+        MotoristaDao dao = new MotoristaDao();
+        if(dml == 1){
+            MotoristaBean m = new MotoristaBean(txMotorista.getText(), txTelefone.getText(), cbStatus.getSelectedItem().toString());
+            if(dao.inserir(m)){
+                JOptionPane.showMessageDialog(this, "Salvo com sucesso!","Confirmação",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
         resetarFormulario();
     }
     
@@ -274,13 +283,15 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     }
     
     private void inserir(){
-        limparDados();
+        limparDados(); //limpa o formlário para novos registros
+        //habilita e desabilita botões necessários
         btInserir.setEnabled(false);
         btEditar.setEnabled(false);
         btExcluir.setEnabled(false);
         btSalvar.setEnabled(true);
         btCancelar.setEnabled(true);
-        habilitarCampos(true);
+        habilitarCampos(true);//habilita campos para edição
+        dml = 1;//seta 1 para inserção quando do acionar o botão salvar
     }
     
     private void editar(){
@@ -290,6 +301,7 @@ public class FrmMotoristas extends JDialog implements ActionListener{
         btSalvar.setEnabled(true);
         btCancelar.setEnabled(true);
         habilitarCampos(true);
+        dml = 2;
     }
     
     @Override

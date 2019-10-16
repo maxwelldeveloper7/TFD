@@ -14,7 +14,7 @@ import tfd.Utilidades.Utilidades;
  */
 public class MotoristaBean {
 
-    private int id;
+    private Integer id;
     private String nomeMotorista;
     private String telefone;
     private boolean ativo;
@@ -23,11 +23,18 @@ public class MotoristaBean {
     
     }
 
-    public MotoristaBean(int id, String nomeMotorista, String telefone, boolean ativo) {
+    public MotoristaBean(Integer id, String nomeMotorista, String telefone, boolean ativo) {
         this.id = id;
         this.nomeMotorista = nomeMotorista;
         this.telefone = telefone;
         this.ativo = ativo;
+    }
+    
+    public MotoristaBean(Integer id, String nomeMotorista, String telefone, String ativo) {
+        this.id = id;
+        this.nomeMotorista = nomeMotorista;
+        this.telefone = telefone;
+        this.setAtivo(ativo);
     }
     
     public MotoristaBean(String nomeMotorista, String telefone, String ativo) {
@@ -57,7 +64,7 @@ public class MotoristaBean {
     }
 
     public String getTelefone() {
-        return telefone;
+        return Utilidades.getDigitos(telefone);
     }
     
     public String getTelefoneMask(){
