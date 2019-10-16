@@ -7,6 +7,7 @@
 package tfd;
 
 import tfd.controle.Controle;
+import tfd.visao.FrmCidades;
 import tfd.visao.FrmMotoristas;
 
 /**
@@ -19,7 +20,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Controle.inicializar();
+        //Controle.inicializar();
+        FrmCidades c = new FrmCidades(null, true);
+        c.setVisible(true);
     }
     
 }
