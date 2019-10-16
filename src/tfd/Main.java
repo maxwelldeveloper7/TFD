@@ -6,6 +6,7 @@
 
 package tfd;
 
+import tfd.controle.Controle;
 import tfd.visao.FrmMotoristas;
 
 /**
@@ -18,8 +19,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FrmMotoristas fm = new FrmMotoristas();
-        fm.setVisible(true);
+        Controle.inicializar();
     }
     
 }

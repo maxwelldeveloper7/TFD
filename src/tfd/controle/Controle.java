@@ -10,6 +10,7 @@ import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,8 +24,8 @@ import tfd.visao.FrmPrincipal;
 public class Controle {
     
     public static Controle instanceSingleton = null;
-    private static FrmPrincipal principal = null;
-    private static FrmMotoristas motoristas = null;
+    public static FrmPrincipal principal = null;
+    public static FrmMotoristas motoristas = null;
     
     private Controle(){
     }
@@ -47,9 +48,20 @@ public class Controle {
                     "/n"+ex.getMessage()+"/nA aplicação será encerrada.");
             System.exit(0);
         }*/
-        FrmPrincipal p = new FrmPrincipal();
-        p.setVisible(true);
-        motoristas = new FrmMotoristas();
+        abreFrmPrincipal();
+    }
+    
+    private static void abreFrmPrincipal(){
+        if(principal == null){
+            principal = new FrmPrincipal();
+        }
+        principal.setVisible(true);
+    }
+    
+    public static void abreFrmMotoristas(JFrame parent, boolean modal){
+        if(motoristas == null){
+            motoristas = new FrmMotoristas( parent,  modal);
+        }
         motoristas.setVisible(true);
     }
 }

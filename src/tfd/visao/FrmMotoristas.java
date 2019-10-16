@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -58,7 +59,8 @@ public class FrmMotoristas extends JDialog implements ActionListener{
     
 
     //Método construtor
-    public FrmMotoristas() {        
+    public FrmMotoristas(JFrame parent, boolean modal) {
+        super(parent, modal);
         setTitle("Cadastro de Motoristas");//define o título
         URL url = this.getClass().getResource("/tfd/visao/carro.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem

@@ -1,6 +1,8 @@
 ﻿--script de criação do banco de dados tfd
-CREATE TABLE motoristas(
+/*CREATE TABLE motoristas(
 id serial primary key not null,
 nomemotorista character varying(100),
 telefonemoto character(11),
-ativo boolean);
+ativo boolean);*/
+
+SELECT * FROM motoristas order by nomemotorista asc

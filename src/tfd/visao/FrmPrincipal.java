@@ -15,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import tfd.controle.Controle;
 
 /**
  *
@@ -92,12 +93,14 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         pnFundo.add(pnBotoes);
         
         getContentPane().add(pnFundo);
-        
+        mnuMotoristas.addActionListener(this);
     }    
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(e.getSource() == mnuMotoristas){
+            Controle.abreFrmMotoristas(this, true);
+        }
     }
     
 }
