@@ -32,7 +32,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
+import tfd.daos.CidadeDao;
 import tfd.daos.MotoristaDao;
+import tfd.modelo.CidadeBean;
 import tfd.modelo.MotoristaBean;
 
 /**
@@ -52,14 +54,14 @@ public class FrmCidades extends JDialog implements ActionListener {
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<MotoristaBean> motoristas;
+    private List<CidadeBean> cidades;
     public Integer dml;
 
     //Método construtor
     public FrmCidades(JFrame parent, boolean modal) {
         super(parent, modal);
         setTitle("Cadastro de Cidades");//define o título
-        URL url = this.getClass().getResource("/tfd/visao/carro.png");//caminho para arquivo
+        URL url = this.getClass().getResource("/tfd/visao/cidades.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
@@ -203,7 +205,7 @@ public class FrmCidades extends JDialog implements ActionListener {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                 Controle.motoristas = null;
+                 Controle.cidades = null;
             }
 
             @Override
@@ -233,25 +235,25 @@ public class FrmCidades extends JDialog implements ActionListener {
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        MotoristaDao dao = new MotoristaDao();
+        CidadeDao dao = new CidadeDao();
 
-        motoristas = dao.listar();
+        cidades = dao.listar();
 
         String[] campos = {null, null, null};
 
-        for (int i = 0; i < motoristas.size(); i++) {
+        for (int i = 0; i < cidades.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(motoristas.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + motoristas.get(i).getNomeMotorista(), i, 1);
-            modelo.setValueAt(motoristas.get(i).getAtivo(), i, 3);
+            modelo.setValueAt(cidades.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + cidades.get(i).getNomeCidade(), i, 1);
+            modelo.setValueAt(cidades.get(i).getUf(), i, 2);
         }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(motoristas.get(tabela.getSelectedRow()).getIdStr());
-            txCidade.setText(motoristas.get(tabela.getSelectedRow()).getNomeMotorista());
-            cbUf.setSelectedItem(motoristas.get(tabela.getSelectedRow()).getAtivo());
+            txId.setText(cidades.get(tabela.getSelectedRow()).getId().toString());
+            txCidade.setText(cidades.get(tabela.getSelectedRow()).getNomeCidade());
+            cbUf.setSelectedItem(cidades.get(tabela.getSelectedRow()).getUf());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -280,7 +282,7 @@ public class FrmCidades extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        motoristas = null;
+        cidades = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -294,18 +296,18 @@ public class FrmCidades extends JDialog implements ActionListener {
 
     private void salvar() {
 
-        MotoristaDao dao = new MotoristaDao();
+        CidadeDao dao = new CidadeDao();
         
         if (dml == 1) {
-            MotoristaBean m = new MotoristaBean(txCidade.getText(), null, cbUf.getSelectedItem().toString());
-            if (dao.inserir(m)) {
+            CidadeBean c = new CidadeBean(txCidade.getText(), cbUf.getSelectedItem().toString());
+            if (dao.inserir(c)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
         if (dml == 2) {
-            MotoristaBean m = new MotoristaBean(Integer.parseInt(txId.getText()), txCidade.getText(), null, cbUf.getSelectedItem().toString());
-            if (dao.alterar(m)) {
+            CidadeBean c = new CidadeBean(Integer.parseInt(txId.getText()), txCidade.getText(), cbUf.getSelectedItem().toString());
+            if (dao.alterar(c)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -314,7 +316,7 @@ public class FrmCidades extends JDialog implements ActionListener {
     }
 
     private void excluir() {
-        MotoristaDao dao = new MotoristaDao();
+        CidadeDao dao = new CidadeDao();
         
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         

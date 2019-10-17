@@ -20,9 +20,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //Controle.inicializar();
-        FrmCidades c = new FrmCidades(null, true);
-        c.setVisible(true);
+        Controle.inicializar();        
     }
     
 }

@@ -55,7 +55,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros = new JMenu("Cadastros");
         menu.add(mnuCadastros);
         
-        mnuCidades = new JMenuItem("Cidades");
+        mnuCidades = new JMenuItem("Cidades", new ImageIcon(getClass().getResource("/tfd/visao/cidades.png")));
         mnuCadastros.add(mnuCidades);        
         mnuClientes = new JMenuItem("Clientes");
         mnuCadastros.add(mnuClientes);
@@ -63,7 +63,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros.add(mnuEspecialidades);
         mnuEstabelecimentos = new JMenuItem("Estabelecimentos");
         mnuCadastros.add(mnuEstabelecimentos);
-        mnuMotoristas = new JMenuItem("Motoristas");
+        mnuMotoristas = new JMenuItem("Motoristas", new ImageIcon(getClass().getResource("/tfd/visao/carro16.png")));
         mnuCadastros.add(mnuMotoristas);
         mnuProcedimentos = new JMenuItem("Procedimentos");
         mnuCadastros.add(mnuProcedimentos);
@@ -94,12 +94,17 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         
         getContentPane().add(pnFundo);
         mnuMotoristas.addActionListener(this);
+        mnuCidades.addActionListener(this);
     }    
     
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == mnuMotoristas){
             Controle.abreFrmMotoristas(this, true);
+        }
+        
+        if(e.getSource() == mnuCidades){
+            Controle.abreFrmCidades(this, true);
         }
     }
     
