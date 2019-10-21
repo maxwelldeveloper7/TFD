@@ -14,7 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.text.DefaultStyledDocument;
 import tfd.controle.Controle;
 
 /**
@@ -42,6 +44,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         setResizable(false);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         construirComponentes();
+        JOptionPane.showMessageDialog(this, "Não esqueça de implementar a tela de login");
     }
     
     /**
