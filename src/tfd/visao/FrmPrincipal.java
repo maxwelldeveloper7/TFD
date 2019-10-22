@@ -29,13 +29,13 @@ public class FrmPrincipal extends JFrame implements ActionListener{
     
     private JMenuBar menu;
     private JMenu mnuCadastros, mnuRelatórios;
-    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes;
+    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes, mnuPassagens;
     private JPanel pnFundo, pnBotoes;
     private JButton btAgenda, btLiberacao;
     
     //Método Construtor
     public FrmPrincipal(){
-        setTitle("TFD - Tramento Fora do Domicílio");
+        setTitle("TFD - Tratamento Fora do Domicílio | Secretaria Municipal de Saúde de Nanuque-MG");
         URL url = this.getClass().getResource("/tfd/visao/favicon.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
@@ -44,7 +44,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         setResizable(false);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         construirComponentes();
-        JOptionPane.showMessageDialog(this, "Não esqueça de implementar a tela de login");
+        JOptionPane.showMessageDialog(this, "implementar login");
     }
     
     /**
@@ -58,17 +58,21 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros = new JMenu("Cadastros");
         menu.add(mnuCadastros);
         
+        mnuAcompanhantes = new JMenuItem("Acompanhantes...", new ImageIcon(getClass().getResource("/tfd/visao/acompanhantes.png")));
+        mnuCadastros.add(mnuAcompanhantes);
         mnuCidades = new JMenuItem("Cidades", new ImageIcon(getClass().getResource("/tfd/visao/cidades.png")));
         mnuCadastros.add(mnuCidades);        
-        mnuClientes = new JMenuItem("Clientes");
+        mnuClientes = new JMenuItem("Clientes...", new ImageIcon(getClass().getResource("/tfd/visao/clientes.png")));
         mnuCadastros.add(mnuClientes);
-        mnuEspecialidades = new JMenuItem("Especialidades");
+        mnuEspecialidades = new JMenuItem("Especialidades...", new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
         mnuCadastros.add(mnuEspecialidades);
-        mnuEstabelecimentos = new JMenuItem("Estabelecimentos");
+        mnuEstabelecimentos = new JMenuItem("Estabelecimentos...", new ImageIcon(getClass().getResource("/tfd/visao/estabelecimentos.png")));
         mnuCadastros.add(mnuEstabelecimentos);
         mnuMotoristas = new JMenuItem("Motoristas", new ImageIcon(getClass().getResource("/tfd/visao/carro16.png")));
         mnuCadastros.add(mnuMotoristas);
-        mnuProcedimentos = new JMenuItem("Procedimentos");
+        mnuPassagens = new JMenuItem("Passagens...", new ImageIcon(getClass().getResource("/tfd/visao/passagem.png")));
+        mnuCadastros.add(mnuPassagens);
+        mnuProcedimentos = new JMenuItem("Procedimentos...", new ImageIcon(getClass().getResource("/tfd/visao/procedimentos.png")));
         mnuCadastros.add(mnuProcedimentos);
                 
         mnuRelatórios = new JMenu("Relatórios");
