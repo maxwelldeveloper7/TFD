@@ -14,7 +14,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,33 +32,32 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
 import tfd.daos.CidadeDao;
-import tfd.modelo.CidadeBean;
+import tfd.modelo.EspecialidadeBean;
 
 /**
  *
  * @author Maxwell de Oliveira Chaves <maxwellchaves1844@gmail.com>
  */
-public class FrmCidades extends JDialog implements ActionListener {
+public class FrmEspecialidades extends JDialog implements ActionListener {
 
     //Declarando componentes
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
     private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir;
-    private JComboBox cbUf;
-    private JTextField txId, txCidade;
-    private JLabel lbId, lbCidade, lbUf;
+    private JTextField txId, txEspecialidade;
+    private JLabel lbId, lbEspecialidade;
     private final DefaultTableModel modelo;
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<CidadeBean> cidades;
+    private List<EspecialidadeBean> especialidades;
     public Integer dml;
 
     //Método construtor
-    public FrmCidades(JFrame parent, boolean modal) {
+    public FrmEspecialidades(JFrame parent, boolean modal) {
         super(parent, modal);
-        setTitle("Cadastro de Cidades");//define o título
-        URL url = this.getClass().getResource("/tfd/visao/cidades.png");//caminho para arquivo
+        setTitle("Cadastro de Especialidades");//define o título
+        URL url = this.getClass().getResource("/tfd/visao/especialidades.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
@@ -85,18 +83,16 @@ public class FrmCidades extends JDialog implements ActionListener {
         //painel que conterá a tabela
         pnTabela = new JPanel(null);
         pnTabela.setBounds(4, 4, 530, 200);
-        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Cidades");
+        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Especialidades");
         pnTabela.setBorder(bordaTabela);
 
         //construindo tabela
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
-        modelo.addColumn("Cidade");
-        modelo.addColumn("UF");
-        //tabela.setAutoResizeMode(0);
+        modelo.addColumn("Especialidade");
+        tabela.setAutoResizeMode(0);
         tabela.getColumnModel().getColumn(0).setPreferredWidth(58);
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(380);
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(58);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(444);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
         direita.setHorizontalAlignment(SwingConstants.RIGHT);
         DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
@@ -104,7 +100,6 @@ public class FrmCidades extends JDialog implements ActionListener {
         DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
         centro.setHorizontalAlignment(SwingConstants.CENTER);
         tabela.getColumnModel().getColumn(0).setCellRenderer(direita);
-        tabela.getColumnModel().getColumn(2).setCellRenderer(centro);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//seleciona apenas uma linha
         lms = tabela.getSelectionModel();
         lms.addListSelectionListener(new ListSelectionListener() {
@@ -135,25 +130,14 @@ public class FrmCidades extends JDialog implements ActionListener {
         txId.setEnabled(false);
         pnDados.add(txId);
 
-        lbCidade = new JLabel("Cidade:");
-        lbCidade.setBounds(60, 20, 100, 20);
-        pnDados.add(lbCidade);
-        txCidade = new JTextField();
-        txCidade.setBounds(60, 40, 300, 20);
-        pnDados.add(txCidade);
+        lbEspecialidade = new JLabel("Especialidade:");
+        lbEspecialidade.setBounds(60, 20, 100, 20);
+        pnDados.add(lbEspecialidade);
+        txEspecialidade = new JTextField();
+        txEspecialidade.setBounds(60, 40, 300, 20);
+        pnDados.add(txEspecialidade);        
 
-        lbUf = new JLabel("UF:");
-        lbUf.setBounds(380, 20, 100, 20);
-        pnDados.add(lbUf);
-
-        cbUf = new JComboBox();
-        cbUf.addItem("");
-        cbUf.addItem("BA");
-        cbUf.addItem("ES");
-        cbUf.addItem("MG");
-        cbUf.setBounds(380, 40, 50, 20);
-        pnDados.add(cbUf);
-
+        
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
         pnBotoes.setBounds(4, 292, 530, 38);
@@ -234,24 +218,21 @@ public class FrmCidades extends JDialog implements ActionListener {
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         CidadeDao dao = new CidadeDao();
+/*
+        especialidades = dao.listar();
 
-        cidades = dao.listar();
+        String[] campos = {null, null};
 
-        String[] campos = {null, null, null};
-
-        for (int i = 0; i < cidades.size(); i++) {
+        for (int i = 0; i < especialidades.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(cidades.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + cidades.get(i).getNomeCidade(), i, 1);
-            modelo.setValueAt(cidades.get(i).getUf(), i, 2);
-        }
+            modelo.setValueAt(especialidades.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + especialidades.get(i).getNomeCidade(), i, 1);
+        }*/
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(cidades.get(tabela.getSelectedRow()).getId().toString());
-            txCidade.setText(cidades.get(tabela.getSelectedRow()).getNomeCidade());
-            cbUf.setSelectedItem(cidades.get(tabela.getSelectedRow()).getUf());
+            txId.setText(especialidades.get(tabela.getSelectedRow()).getId().toString());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -261,15 +242,13 @@ public class FrmCidades extends JDialog implements ActionListener {
 
     private void limparDados() {
         txId.setText("");
-        txCidade.setText("");
-        cbUf.setSelectedIndex(0);
+        txEspecialidade.setText("");
     }
 
     private void habilitarCampos(boolean habilitar) {
-        txCidade.setEnabled(habilitar);
-        cbUf.setEnabled(habilitar);
+        txEspecialidade.setEnabled(habilitar);
         tabela.setEnabled(!habilitar);
-        txCidade.requestFocus();
+        txEspecialidade.requestFocus();
     }
 
     private void resetarFormulario() {
@@ -280,7 +259,7 @@ public class FrmCidades extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        cidades = null;
+        especialidades = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -297,17 +276,17 @@ public class FrmCidades extends JDialog implements ActionListener {
         CidadeDao dao = new CidadeDao();
         
         if (dml == 1) {
-            CidadeBean c = new CidadeBean(txCidade.getText(), cbUf.getSelectedItem().toString());
-            if (dao.inserir(c)) {
+            EspecialidadeBean c = new EspecialidadeBean(txEspecialidade.getText());
+            /*if (dao.inserir(c)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-            }
+            }*/
         }
 
         if (dml == 2) {
-            CidadeBean c = new CidadeBean(Integer.parseInt(txId.getText()), txCidade.getText(), cbUf.getSelectedItem().toString());
-            if (dao.alterar(c)) {
+            EspecialidadeBean c = new EspecialidadeBean(Integer.parseInt(txId.getText()), txEspecialidade.getText());
+            /*if (dao.alterar(c)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-            }
+            }*/
         }
         
         resetarFormulario();
