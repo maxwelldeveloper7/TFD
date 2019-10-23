@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
 import tfd.daos.CidadeDao;
+import tfd.daos.EspecialidadeDao;
 import tfd.modelo.EspecialidadeBean;
 
 /**
@@ -134,7 +135,7 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
         lbEspecialidade.setBounds(60, 20, 100, 20);
         pnDados.add(lbEspecialidade);
         txEspecialidade = new JTextField();
-        txEspecialidade.setBounds(60, 40, 300, 20);
+        txEspecialidade.setBounds(60, 40, 430, 20);
         pnDados.add(txEspecialidade);        
 
         
@@ -187,7 +188,7 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                 Controle.cidades = null;
+                 Controle.especialidades = null;
             }
 
             @Override
@@ -217,8 +218,8 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        CidadeDao dao = new CidadeDao();
-/*
+        EspecialidadeDao dao = new EspecialidadeDao();
+
         especialidades = dao.listar();
 
         String[] campos = {null, null};
@@ -226,13 +227,14 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
         for (int i = 0; i < especialidades.size(); i++) {
             modelo.addRow(campos);
             modelo.setValueAt(especialidades.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + especialidades.get(i).getNomeCidade(), i, 1);
-        }*/
+            modelo.setValueAt("  " + especialidades.get(i).getNomeEspecialidade(), i, 1);
+        }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
             txId.setText(especialidades.get(tabela.getSelectedRow()).getId().toString());
+            txEspecialidade.setText(especialidades.get(tabela.getSelectedRow()).getNomeEspecialidade());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -273,27 +275,27 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
 
     private void salvar() {
 
-        CidadeDao dao = new CidadeDao();
+        EspecialidadeDao dao = new EspecialidadeDao();
         
         if (dml == 1) {
             EspecialidadeBean c = new EspecialidadeBean(txEspecialidade.getText());
-            /*if (dao.inserir(c)) {
+            if (dao.inserir(c)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-            }*/
+            }
         }
 
         if (dml == 2) {
             EspecialidadeBean c = new EspecialidadeBean(Integer.parseInt(txId.getText()), txEspecialidade.getText());
-            /*if (dao.alterar(c)) {
+            if (dao.alterar(c)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-            }*/
+            }
         }
         
         resetarFormulario();
     }
 
     private void excluir() {
-        CidadeDao dao = new CidadeDao();
+        EspecialidadeDao dao = new EspecialidadeDao();
         
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         

@@ -45,7 +45,7 @@ public class CidadeDao extends GenericDAO{
                 cidades.add(c);
             }
         } catch (SQLException e) {
-            System.out.println("Falha ao listar motoristas; "+e.getMessage());
+            System.out.println("Falha ao listar cidades; "+e.getMessage());
         }
         return cidades;
     }

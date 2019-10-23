@@ -16,7 +16,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.text.DefaultStyledDocument;
 import tfd.controle.Controle;
 
 /**
@@ -64,7 +63,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros.add(mnuCidades);        
         mnuClientes = new JMenuItem("Clientes...", new ImageIcon(getClass().getResource("/tfd/visao/clientes.png")));
         mnuCadastros.add(mnuClientes);
-        mnuEspecialidades = new JMenuItem("Especialidades...", new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
+        mnuEspecialidades = new JMenuItem("Especialidades", new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
         mnuCadastros.add(mnuEspecialidades);
         mnuEstabelecimentos = new JMenuItem("Estabelecimentos...", new ImageIcon(getClass().getResource("/tfd/visao/estabelecimentos.png")));
         mnuCadastros.add(mnuEstabelecimentos);
@@ -102,6 +101,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         getContentPane().add(pnFundo);
         mnuMotoristas.addActionListener(this);
         mnuCidades.addActionListener(this);
+        mnuEspecialidades.addActionListener(this);
     }    
     
     @Override
@@ -112,6 +112,10 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         
         if(e.getSource() == mnuCidades){
             Controle.abreFrmCidades(this, true);
+        }
+        
+        if(e.getSource() == mnuEspecialidades){
+            Controle.abreFrmEspecialidades(this, true);
         }
     }
     

@@ -21,9 +21,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //Controle.inicializar();
-        FrmEspecialidades e = new FrmEspecialidades(null, true);
-        e.setVisible(true);
+        Controle.inicializar();
+        /*FrmEspecialidades e = new FrmEspecialidades(null, true);
+        e.setVisible(true);*/
     }
     
 }
