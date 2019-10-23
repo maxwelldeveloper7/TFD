@@ -28,7 +28,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
     
     private JMenuBar menu;
     private JMenu mnuCadastros, mnuRelatórios;
-    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes, mnuPassagens;
+    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes;
     private JPanel pnFundo, pnBotoes;
     private JButton btAgenda, btLiberacao;
     
@@ -69,8 +69,6 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros.add(mnuEstabelecimentos);
         mnuMotoristas = new JMenuItem("Motoristas", new ImageIcon(getClass().getResource("/tfd/visao/carro16.png")));
         mnuCadastros.add(mnuMotoristas);
-        mnuPassagens = new JMenuItem("Passagens...", new ImageIcon(getClass().getResource("/tfd/visao/passagem.png")));
-        mnuCadastros.add(mnuPassagens);
         mnuProcedimentos = new JMenuItem("Procedimentos...", new ImageIcon(getClass().getResource("/tfd/visao/procedimentos.png")));
         mnuCadastros.add(mnuProcedimentos);
                 
