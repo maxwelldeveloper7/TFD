@@ -46,8 +46,8 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
     private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir;
     private JComboBox cbUf;
-    private JTextField txId, txCidade;
-    private JLabel lbId, lbCidade, lbUf;
+    private JTextField txId, txProcedimento;
+    private JLabel lbId, lbProcedimento, lbUf;
     private final DefaultTableModel modelo;
     private ListSelectionModel lms;
     private JTable tabela;
@@ -58,8 +58,8 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     //Método construtor
     public FrmProcedimentos(JFrame parent, boolean modal) {
         super(parent, modal);
-        setTitle("Cadastro de Cidades");//define o título
-        URL url = this.getClass().getResource("/tfd/visao/cidades.png");//caminho para arquivo
+        setTitle("Cadastro de Procedimentos");//define o título
+        URL url = this.getClass().getResource("/tfd/visao/procedimentos.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
@@ -85,13 +85,13 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         //painel que conterá a tabela
         pnTabela = new JPanel(null);
         pnTabela.setBounds(4, 4, 530, 200);
-        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Cidades");
+        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Procedimentos");
         pnTabela.setBorder(bordaTabela);
 
         //construindo tabela
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
-        modelo.addColumn("Cidade");
+        modelo.addColumn("Procedimento");
         modelo.addColumn("UF");
         //tabela.setAutoResizeMode(0);
         tabela.getColumnModel().getColumn(0).setPreferredWidth(58);
@@ -135,12 +135,12 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         txId.setEnabled(false);
         pnDados.add(txId);
 
-        lbCidade = new JLabel("Cidade:");
-        lbCidade.setBounds(60, 20, 100, 20);
-        pnDados.add(lbCidade);
-        txCidade = new JTextField();
-        txCidade.setBounds(60, 40, 300, 20);
-        pnDados.add(txCidade);
+        lbProcedimento = new JLabel("Cidade:");
+        lbProcedimento.setBounds(60, 20, 100, 20);
+        pnDados.add(lbProcedimento);
+        txProcedimento = new JTextField();
+        txProcedimento.setBounds(60, 40, 300, 20);
+        pnDados.add(txProcedimento);
 
         lbUf = new JLabel("UF:");
         lbUf.setBounds(380, 20, 100, 20);
@@ -250,7 +250,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
             txId.setText(cidades.get(tabela.getSelectedRow()).getId().toString());
-            txCidade.setText(cidades.get(tabela.getSelectedRow()).getNomeCidade());
+            txProcedimento.setText(cidades.get(tabela.getSelectedRow()).getNomeCidade());
             cbUf.setSelectedItem(cidades.get(tabela.getSelectedRow()).getUf());
             habilitarEdicaoExclusao(true);
         } else {
@@ -261,15 +261,15 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
 
     private void limparDados() {
         txId.setText("");
-        txCidade.setText("");
+        txProcedimento.setText("");
         cbUf.setSelectedIndex(0);
     }
 
     private void habilitarCampos(boolean habilitar) {
-        txCidade.setEnabled(habilitar);
+        txProcedimento.setEnabled(habilitar);
         cbUf.setEnabled(habilitar);
         tabela.setEnabled(!habilitar);
-        txCidade.requestFocus();
+        txProcedimento.requestFocus();
     }
 
     private void resetarFormulario() {
@@ -297,14 +297,14 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         CidadeDao dao = new CidadeDao();
         
         if (dml == 1) {
-            CidadeBean c = new CidadeBean(txCidade.getText(), cbUf.getSelectedItem().toString());
+            CidadeBean c = new CidadeBean(txProcedimento.getText(), cbUf.getSelectedItem().toString());
             if (dao.inserir(c)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
         if (dml == 2) {
-            CidadeBean c = new CidadeBean(Integer.parseInt(txId.getText()), txCidade.getText(), cbUf.getSelectedItem().toString());
+            CidadeBean c = new CidadeBean(Integer.parseInt(txId.getText()), txProcedimento.getText(), cbUf.getSelectedItem().toString());
             if (dao.alterar(c)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
