@@ -10,6 +10,7 @@ import tfd.controle.Controle;
 import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;
 import tfd.visao.FrmMotoristas;
+import tfd.visao.FrmProcedimentos;
 
 /**
  *
@@ -21,9 +22,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Controle.inicializar();
-        /*FrmEspecialidades e = new FrmEspecialidades(null, true);
-        e.setVisible(true);*/
+        //Controle.inicializar();
+        FrmProcedimentos p = new FrmProcedimentos(null, true);
+        p.setVisible(true);
     }
     
 }
