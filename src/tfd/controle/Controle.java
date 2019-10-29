@@ -18,6 +18,7 @@ import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;
 import tfd.visao.FrmMotoristas;
 import tfd.visao.FrmPrincipal;
+import tfd.visao.FrmProcedimentos;
 
 /**
  *
@@ -30,6 +31,7 @@ public class Controle {
     public static FrmMotoristas motoristas = null;
     public static FrmCidades cidades = null;
     public static FrmEspecialidades especialidades = null;
+    public static FrmProcedimentos procedimentos = null;
     
     private Controle(){
     }
@@ -81,5 +83,12 @@ public class Controle {
             especialidades = new FrmEspecialidades(parent, modal);
         }
         especialidades.setVisible(true);
+    }
+    
+    public static void abreFrmProcedimentos(JFrame parent, boolean modal){
+        if(procedimentos == null){
+            procedimentos = new FrmProcedimentos(parent, modal);
+        }
+        procedimentos.setVisible(true);
     }
 }

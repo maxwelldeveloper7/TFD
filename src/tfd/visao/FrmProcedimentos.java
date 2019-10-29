@@ -35,8 +35,10 @@ import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
 import tfd.daos.CidadeDao;
 import tfd.daos.EspecialidadeDao;
+import tfd.daos.ProcedimentoDao;
 import tfd.modelo.CidadeBean;
 import tfd.modelo.EspecialidadeBean;
+import tfd.modelo.ProcedimentoBean;
 
 /**
  *
@@ -55,8 +57,9 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<CidadeBean> cidades;
+    private List<ProcedimentoBean> procedimentos;
     public Integer dml;
+    List<EspecialidadeBean> lista = new ArrayList<>();
 
     //Método construtor
     public FrmProcedimentos(JFrame parent, boolean modal) {
@@ -105,7 +108,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
         esquerda.setHorizontalAlignment(SwingConstants.LEFT);
         DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
-        centro.setHorizontalAlignment(SwingConstants.CENTER);
+        centro.setHorizontalAlignment(SwingConstants.LEFT);
         tabela.getColumnModel().getColumn(0).setCellRenderer(direita);
         tabela.getColumnModel().getColumn(2).setCellRenderer(centro);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//seleciona apenas uma linha
@@ -153,12 +156,12 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         cbEspecialidade.setBounds(440, 40, 270, 20);
         carregaCbEspecialidade();
         pnDados.add(cbEspecialidade);
-        
+
         btEspecialidades = new JButton(new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
         btEspecialidades.setBounds(712, 40, 20, 20);
         btEspecialidades.setToolTipText("Cadastro de Especialidades");
         pnDados.add(btEspecialidades);
-        
+
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
         pnBotoes.setBounds(4, 292, 750, 38);
@@ -209,7 +212,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                Controle.cidades = null;
+                Controle.procedimentos = null;
             }
 
             @Override
@@ -237,25 +240,25 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        CidadeDao dao = new CidadeDao();
+        ProcedimentoDao dao = new ProcedimentoDao();
 
-        cidades = dao.listar();
+        procedimentos = dao.listar();
 
         String[] campos = {null, null, null};
 
-        for (int i = 0; i < cidades.size(); i++) {
+        for (int i = 0; i < procedimentos.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(cidades.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + cidades.get(i).getNomeCidade(), i, 1);
-            modelo.setValueAt(cidades.get(i).getUf(), i, 2);
+            modelo.setValueAt(procedimentos.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + procedimentos.get(i).getNomeProcedimento(), i, 1);
+            modelo.setValueAt("  "+procedimentos.get(i).getEspecialidade().getNomeEspecialidade(), i, 2);
         }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(cidades.get(tabela.getSelectedRow()).getId().toString());
-            txProcedimento.setText(cidades.get(tabela.getSelectedRow()).getNomeCidade());
-            cbEspecialidade.setSelectedItem(cidades.get(tabela.getSelectedRow()).getUf());
+            txId.setText(procedimentos.get(tabela.getSelectedRow()).getId().toString());
+            txProcedimento.setText(procedimentos.get(tabela.getSelectedRow()).getNomeProcedimento());
+            cbEspecialidade.setSelectedItem(procedimentos.get(tabela.getSelectedRow()).getEspecialidade().getNomeEspecialidade());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -285,7 +288,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        cidades = null;
+        procedimentos = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -298,22 +301,36 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     }
 
     private void salvar() {
+        System.out.println(validarFormulario());
+        if (validarFormulario()) {
 
-        if (dml == 1) {
-            CidadeBean c = new CidadeBean(txProcedimento.getText(), cbEspecialidade.getSelectedItem().toString());
-            if (new CidadeDao().inserir(c)) {
-                JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+            EspecialidadeBean e = new EspecialidadeBean();
+            
+            for (EspecialidadeBean especialidade : lista) {
+                if (especialidade.getNomeEspecialidade().equals(cbEspecialidade.getSelectedItem().toString())) {
+                    e.setId(especialidade.getId());
+                    e.setNomeEspecialidade(especialidade.getNomeEspecialidade());
+                    break;
+                }
             }
-        }
-
-        if (dml == 2) {
-            CidadeBean c = new CidadeBean(Integer.parseInt(txId.getText()), txProcedimento.getText(), cbEspecialidade.getSelectedItem().toString());
-            if (new CidadeDao().alterar(c)) {
-                JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+            
+            if (dml == 1) {
+                
+                ProcedimentoBean p = new ProcedimentoBean(txProcedimento.getText(), e);
+                if (new ProcedimentoDao().inserir(p)) {
+                    JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
-        }
 
-        resetarFormulario();
+            if (dml == 2) {
+                ProcedimentoBean p = new ProcedimentoBean(Integer.parseInt(txId.getText()), txProcedimento.getText(), e);
+                if (new ProcedimentoDao().alterar(p)) {
+                    JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+            resetarFormulario();
+        }
     }
 
     private void excluir() {
@@ -371,20 +388,39 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         if (e.getSource() == btCancelar) {
             resetarFormulario();
         }
-        
-        if(e.getSource() == btEspecialidades){
+
+        if (e.getSource() == btEspecialidades) {
             Controle.abreFrmEspecialidades(null, true);
         }
     }
 
-    private void carregaCbEspecialidade() {
-        List<EspecialidadeBean> lista = new ArrayList<>();
+    public void carregaCbEspecialidade() {
+        lista.clear();
+
         lista = new EspecialidadeDao().listar();
 
+        cbEspecialidade.removeAllItems();
+
         cbEspecialidade.addItem("Nenhum item selecionado");
-        
+
         for (EspecialidadeBean especialidadeBean : lista) {
             cbEspecialidade.addItem(especialidadeBean.getNomeEspecialidade());
         }
     }
+
+    private boolean validarFormulario() {
+        if(txProcedimento.getText().trim().equals("")){
+            txProcedimento.requestFocus();
+            return false;
+        }
+        
+        if(cbEspecialidade.getSelectedIndex() == 0){
+            cbEspecialidade.requestFocus();
+            return false;
+        }
+        
+        return true;
+    }
+
+    
 }

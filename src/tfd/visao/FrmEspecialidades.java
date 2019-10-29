@@ -31,7 +31,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
-import tfd.daos.CidadeDao;
 import tfd.daos.EspecialidadeDao;
 import tfd.modelo.EspecialidadeBean;
 
@@ -189,6 +188,10 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
             @Override
             public void windowClosed(WindowEvent e) {
                  Controle.especialidades = null;
+                 
+                 if(Controle.procedimentos != null){
+                     Controle.procedimentos.carregaCbEspecialidade();
+                 }
             }
 
             @Override
