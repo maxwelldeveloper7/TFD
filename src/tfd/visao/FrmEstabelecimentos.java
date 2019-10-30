@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,46 +32,42 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
-import tfd.daos.CidadeDao;
 import tfd.daos.EspecialidadeDao;
-import tfd.daos.ProcedimentoDao;
-import tfd.modelo.CidadeBean;
+import tfd.daos.EstabelecimentoDao;
 import tfd.modelo.EspecialidadeBean;
-import tfd.modelo.ProcedimentoBean;
+import tfd.modelo.EstabelecimentoBean;
 
 /**
  *
  * @author Maxwell de Oliveira Chaves <maxwellchaves1844@gmail.com>
  */
-public class FrmProcedimentos extends JDialog implements ActionListener {
+public class FrmEstabelecimentos extends JDialog implements ActionListener {
 
     //Declarando componentes
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
-    private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir, btEspecialidades;
-    public JComboBox cbEspecialidade;
-    private JTextField txId, txProcedimento;
-    private JLabel lbId, lbProcedimento, lbEspecialidade;
+    private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir;
+    private JTextField txId, txEstabelecimento;
+    private JLabel lbId, lbEstabelecimento;
     private final DefaultTableModel modelo;
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<ProcedimentoBean> procedimentos;
+    private List<EstabelecimentoBean> estabelecimentos;
     public Integer dml;
-    List<EspecialidadeBean> lista = new ArrayList<>();
 
     //Método construtor
-    public FrmProcedimentos(JFrame parent, boolean modal) {
+    public FrmEstabelecimentos(JFrame parent, boolean modal) {
         super(parent, modal);
-        setTitle("Cadastro de Procedimentos");//define o título
-        URL url = this.getClass().getResource("/tfd/visao/procedimentos.png");//caminho para arquivo
+        setTitle("Cadastro de Estabelecimentos");//define o título
+        URL url = this.getClass().getResource("/tfd/visao/estabelecimentos.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
-        setBounds((screenSize.width - 764) / 2, (screenSize.height - 364) / 2, 764, 364);//define o tamanho da janela e posiciona ao centro
+        setBounds((screenSize.width - 544) / 2, (screenSize.height - 364) / 2, 544, 364);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
-
+        
         //impossibilita edição da tabela
         this.modelo = new DefaultTableModel() {
             @Override
@@ -80,7 +75,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
                 return false;
             }
         };
-
+        
         construirComponentes();
         habilitarCampos(false);
         resetarFormulario();
@@ -90,27 +85,24 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     private void construirComponentes() {
         //painel que conterá a tabela
         pnTabela = new JPanel(null);
-        pnTabela.setBounds(4, 4, 750, 200);
-        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Procedimentos");
+        pnTabela.setBounds(4, 4, 530, 200);
+        bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Estabelecimentos");
         pnTabela.setBorder(bordaTabela);
 
         //construindo tabela
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
-        modelo.addColumn("Procedimento");
-        modelo.addColumn("Especialidade");
-        //tabela.setAutoResizeMode(0);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(28);
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(320);
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(268);
+        modelo.addColumn("Estabelecimento");
+        tabela.setAutoResizeMode(0);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(58);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(444);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
         direita.setHorizontalAlignment(SwingConstants.RIGHT);
         DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
         esquerda.setHorizontalAlignment(SwingConstants.LEFT);
         DefaultTableCellRenderer centro = new DefaultTableCellRenderer();
-        centro.setHorizontalAlignment(SwingConstants.LEFT);
+        centro.setHorizontalAlignment(SwingConstants.CENTER);
         tabela.getColumnModel().getColumn(0).setCellRenderer(direita);
-        tabela.getColumnModel().getColumn(2).setCellRenderer(centro);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//seleciona apenas uma linha
         lms = tabela.getSelectionModel();
         lms.addListSelectionListener(new ListSelectionListener() {
@@ -123,12 +115,12 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
             }
         });
         barraRolagem = new JScrollPane(tabela);
-        barraRolagem.setBounds(5, 17, 740, 178);
+        barraRolagem.setBounds(5, 17, 520, 178);
         pnTabela.add(barraRolagem);
 
         //Painel que conterá o formulário de dados
         pnDados = new JPanel(null);
-        pnDados.setBounds(4, 208, 750, 80);
+        pnDados.setBounds(4, 208, 530, 80);
         bordaDados = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Dados");
         pnDados.setBorder(bordaDados);
 
@@ -141,30 +133,17 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         txId.setEnabled(false);
         pnDados.add(txId);
 
-        lbProcedimento = new JLabel("Procedimento:");
-        lbProcedimento.setBounds(60, 20, 100, 20);
-        pnDados.add(lbProcedimento);
-        txProcedimento = new JTextField();
-        txProcedimento.setBounds(60, 40, 360, 20);
-        pnDados.add(txProcedimento);
+        lbEstabelecimento = new JLabel("Estabelecimento:");
+        lbEstabelecimento.setBounds(60, 20, 100, 20);
+        pnDados.add(lbEstabelecimento);
+        txEstabelecimento = new JTextField();
+        txEstabelecimento.setBounds(60, 40, 430, 20);
+        pnDados.add(txEstabelecimento);        
 
-        lbEspecialidade = new JLabel("Especialidade:");
-        lbEspecialidade.setBounds(440, 20, 100, 20);
-        pnDados.add(lbEspecialidade);
-
-        cbEspecialidade = new JComboBox();
-        cbEspecialidade.setBounds(440, 40, 270, 20);
-        carregaCbEspecialidade();
-        pnDados.add(cbEspecialidade);
-
-        btEspecialidades = new JButton(new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
-        btEspecialidades.setBounds(712, 40, 20, 20);
-        btEspecialidades.setToolTipText("Cadastro de Especialidades");
-        pnDados.add(btEspecialidades);
-
+        
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
-        pnBotoes.setBounds(4, 292, 750, 38);
+        pnBotoes.setBounds(4, 292, 530, 38);
 
         //Contruindo botões
         btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
@@ -197,68 +176,71 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         btExcluir.addActionListener(this);
         btSalvar.addActionListener(this);
         btCancelar.addActionListener(this);
-        btEspecialidades.addActionListener(this);
         this.addWindowListener(new WindowListener() {
 
             @Override
             public void windowOpened(WindowEvent e) {
-
+                
             }
 
             @Override
             public void windowClosing(WindowEvent e) {
-
+                
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                Controle.procedimentos = null;
+                 Controle.especialidades = null;
+                 
+                 if(Controle.procedimentos != null){
+                     Controle.procedimentos.carregaCbEspecialidade();
+                     Controle.procedimentos.cbEspecialidade.requestFocus();
+                 }
             }
 
             @Override
             public void windowIconified(WindowEvent e) {
-
+                
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-
+                
             }
 
             @Override
             public void windowActivated(WindowEvent e) {
-
+                
             }
 
             @Override
             public void windowDeactivated(WindowEvent e) {
-
+                
             }
         });
     }
+    
+    
 
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        ProcedimentoDao dao = new ProcedimentoDao();
+        EstabelecimentoDao dao = new EstabelecimentoDao();        
+        estabelecimentos = dao.listar();
 
-        procedimentos = dao.listar();
+        String[] campos = {null, null};
 
-        String[] campos = {null, null, null};
-
-        for (int i = 0; i < procedimentos.size(); i++) {
+        for (int i = 0; i < estabelecimentos.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(procedimentos.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + procedimentos.get(i).getNomeProcedimento(), i, 1);
-            modelo.setValueAt("  "+procedimentos.get(i).getEspecialidade().getNomeEspecialidade(), i, 2);
+            modelo.setValueAt(estabelecimentos.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + estabelecimentos.get(i).getNomeEstabelecimento(), i, 1);
         }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(procedimentos.get(tabela.getSelectedRow()).getId().toString());
-            txProcedimento.setText(procedimentos.get(tabela.getSelectedRow()).getNomeProcedimento());
-            cbEspecialidade.setSelectedItem(procedimentos.get(tabela.getSelectedRow()).getEspecialidade().getNomeEspecialidade());
+            txId.setText(estabelecimentos.get(tabela.getSelectedRow()).getId().toString());
+            txEstabelecimento.setText(estabelecimentos.get(tabela.getSelectedRow()).getNomeEstabelecimento());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -268,16 +250,13 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
 
     private void limparDados() {
         txId.setText("");
-        txProcedimento.setText("");
-        cbEspecialidade.setSelectedIndex(0);
+        txEstabelecimento.setText("");
     }
 
     private void habilitarCampos(boolean habilitar) {
-        txProcedimento.setEnabled(habilitar);
-        cbEspecialidade.setEnabled(habilitar);
-        btEspecialidades.setEnabled(habilitar);
+        txEstabelecimento.setEnabled(habilitar);
         tabela.setEnabled(!habilitar);
-        txProcedimento.requestFocus();
+        txEstabelecimento.requestFocus();
     }
 
     private void resetarFormulario() {
@@ -288,7 +267,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        procedimentos = null;
+        estabelecimentos = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -301,43 +280,33 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
     }
 
     private void salvar() {
-        System.out.println(validarFormulario());
-        if (validarFormulario()) {
 
-            EspecialidadeBean e = new EspecialidadeBean();
-            
-            for (EspecialidadeBean especialidade : lista) {
-                if (especialidade.getNomeEspecialidade().equals(cbEspecialidade.getSelectedItem().toString())) {
-                    e.setId(especialidade.getId());
-                    e.setNomeEspecialidade(especialidade.getNomeEspecialidade());
-                    break;
-                }
+        EstabelecimentoDao dao = new EstabelecimentoDao();
+        
+        if (dml == 1) {
+            EstabelecimentoBean e = new EstabelecimentoBean(txEstabelecimento.getText());
+            if (dao.inserir(e)) {
+                JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
-            
-            if (dml == 1) {
-                
-                ProcedimentoBean p = new ProcedimentoBean(txProcedimento.getText(), e);
-                if (new ProcedimentoDao().inserir(p)) {
-                    JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-
-            if (dml == 2) {
-                ProcedimentoBean p = new ProcedimentoBean(Integer.parseInt(txId.getText()), txProcedimento.getText(), e);
-                if (new ProcedimentoDao().alterar(p)) {
-                    JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-
-            resetarFormulario();
         }
+
+        if (dml == 2) {
+            EstabelecimentoBean e = new EstabelecimentoBean(Integer.parseInt(txId.getText()), txEstabelecimento.getText());
+            if (dao.alterar(e)) {
+                JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+        resetarFormulario();
     }
 
     private void excluir() {
+        EstabelecimentoDao dao = new EstabelecimentoDao();
+        
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
+        
         if (resposta == 0) {
-            if (new CidadeDao().excluir(Integer.parseInt(txId.getText().trim()))) {
+            if (dao.excluir(Integer.parseInt(txId.getText().trim()))) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -388,39 +357,5 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         if (e.getSource() == btCancelar) {
             resetarFormulario();
         }
-
-        if (e.getSource() == btEspecialidades) {
-            Controle.abreFrmEspecialidades(null, true);
-        }
     }
-
-    public void carregaCbEspecialidade() {
-        lista.clear();
-
-        lista = new EspecialidadeDao().listar();
-
-        cbEspecialidade.removeAllItems();
-
-        cbEspecialidade.addItem("Nenhum item selecionado");
-
-        for (EspecialidadeBean especialidadeBean : lista) {
-            cbEspecialidade.addItem(especialidadeBean.getNomeEspecialidade());
-        }
-    }
-
-    private boolean validarFormulario() {
-        if(txProcedimento.getText().trim().equals("")){
-            txProcedimento.requestFocus();
-            return false;
-        }
-        
-        if(cbEspecialidade.getSelectedIndex() == 0){
-            cbEspecialidade.requestFocus();
-            return false;
-        }
-        
-        return true;
-    }
-
-    
 }

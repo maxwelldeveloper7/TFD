@@ -23,7 +23,7 @@ cdespeci integer not null,
 CONSTRAINT fk_cdespeci FOREIGN KEY (cdespeci)
 REFERENCES especialidades (id)
 ON UPDATE NO ACTION ON DELETE NO ACTION
-);*/
+);
 
 CREATE VIEW vpproc as (
 
@@ -32,4 +32,10 @@ SELECT p.id, p.nomeproc, p.cdespeci, e.nomeespe
 FROM procedimentos p INNER JOIN especialidades e on p.cdespeci = e.id);
 
 
-select * from vpproc where id = 1 order by nomeproc asc
+select * from vpproc where id = 1 order by nomeproc asc*/
+
+CREATE TABLE estabelecimentos (
+id serial primary key not null,
+nomeestabe character varying not null);
+
+select * from estabelecimentos

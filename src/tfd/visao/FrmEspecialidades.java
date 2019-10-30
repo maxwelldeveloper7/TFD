@@ -191,6 +191,7 @@ public class FrmEspecialidades extends JDialog implements ActionListener {
                  
                  if(Controle.procedimentos != null){
                      Controle.procedimentos.carregaCbEspecialidade();
+                     Controle.procedimentos.cbEspecialidade.requestFocus();
                  }
             }
 

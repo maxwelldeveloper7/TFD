@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;
+import tfd.visao.FrmEstabelecimentos;
 import tfd.visao.FrmMotoristas;
 import tfd.visao.FrmPrincipal;
 import tfd.visao.FrmProcedimentos;
@@ -32,6 +33,7 @@ public class Controle {
     public static FrmCidades cidades = null;
     public static FrmEspecialidades especialidades = null;
     public static FrmProcedimentos procedimentos = null;
+    public static FrmEstabelecimentos estabelecimentos = null;
     
     private Controle(){
     }
@@ -90,5 +92,12 @@ public class Controle {
             procedimentos = new FrmProcedimentos(parent, modal);
         }
         procedimentos.setVisible(true);
+    }
+    
+    public static void abreFrmEstabelecimentos(JFrame parent, boolean modal){
+        if(estabelecimentos == null){
+            estabelecimentos = new FrmEstabelecimentos(parent, modal);
+        }
+        estabelecimentos.setVisible(true);
     }
 }

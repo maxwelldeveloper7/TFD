@@ -7,10 +7,6 @@
 package tfd;
 
 import tfd.controle.Controle;
-import tfd.visao.FrmCidades;
-import tfd.visao.FrmEspecialidades;
-import tfd.visao.FrmMotoristas;
-import tfd.visao.FrmProcedimentos;
 
 /**
  *
@@ -23,8 +19,6 @@ public class Main {
      */
     public static void main(String[] args) {
         Controle.inicializar();
-        /*FrmProcedimentos p = new FrmProcedimentos(null, true);
-        p.setVisible(true);*/
     }
     
 }
