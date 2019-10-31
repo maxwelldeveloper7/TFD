@@ -57,7 +57,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros = new JMenu("Cadastros");
         menu.add(mnuCadastros);
         
-        mnuAcompanhantes = new JMenuItem("Acompanhantes...", new ImageIcon(getClass().getResource("/tfd/visao/acompanhantes.png")));
+        mnuAcompanhantes = new JMenuItem("Acompanhantes", new ImageIcon(getClass().getResource("/tfd/visao/acompanhantes.png")));
         mnuCadastros.add(mnuAcompanhantes);
         mnuCidades = new JMenuItem("Cidades", new ImageIcon(getClass().getResource("/tfd/visao/cidades.png")));
         mnuCadastros.add(mnuCidades);        
@@ -102,6 +102,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuEspecialidades.addActionListener(this);
         mnuProcedimentos.addActionListener(this);
         mnuEstabelecimentos.addActionListener(this);
+        mnuAcompanhantes.addActionListener(this);
     }    
     
     @Override
@@ -122,6 +123,9 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         }
         if(e.getSource() == mnuEstabelecimentos){
             Controle.abreFrmEstabelecimentos(this, true);
+        }
+        if(e.getSource() == mnuAcompanhantes){
+            Controle.abreFrmAcompanhates(this, true);
         }
     }
     
