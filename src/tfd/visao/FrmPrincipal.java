@@ -11,11 +11,15 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import tfd.controle.Controle;
 
 /**
@@ -29,17 +33,18 @@ public class FrmPrincipal extends JFrame implements ActionListener{
     private JMenuBar menu;
     private JMenu mnuCadastros, mnuRelatórios;
     private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes;
-    private JPanel pnFundo, pnBotoes;
+    private JPanel pnFundo, pnBotoes, pnBarraStatus;
     private JButton btAgenda, btLiberacao;
+    private JLabel lbImagem, lbUsuario, lbNomeUsuario;
     
     //Método Construtor
     public FrmPrincipal(){
-        setTitle("TFD - Tratamento Fora do Domicílio | Secretaria Municipal de Saúde de Nanuque-MG");
+        setTitle("Prefeitura Municipal de Nanuque-MG | Secretaria de Saúde");
         URL url = this.getClass().getResource("/tfd/visao/favicon.png");//caminho para arquivo
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension tamanhoDaTela = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da 
-        setBounds((tamanhoDaTela.width - 800) / 2, (tamanhoDaTela.height - 600) / 2, 800, 600);//define o tamanho da janela e posiciona ao centro
+        setBounds((tamanhoDaTela.width - 1200) / 2, (tamanhoDaTela.height - 720) / 2, 1200, 720);//define o tamanho da janela e posiciona ao centro
         setResizable(false);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         construirComponentes();
@@ -75,26 +80,48 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuRelatórios = new JMenu("Relatórios");
         menu.add(mnuRelatórios);
         
-
+        //definindo imagem de fundo
+        lbImagem = new JLabel(new ImageIcon(getClass().getResource("/tfd/visao/tfd_fundo.png")));
+        lbImagem.setBounds(331, 110, 512, 250);
+        
         //Inicializando Botões
         btAgenda = new JButton("Agendamento do Carro");
         btAgenda.setIcon(new ImageIcon(getClass().getResource("/tfd/visao/carro.png")));
-        //btAgenda.setVerticalTextPosition(SwingConstants.BOTTOM);
         
         btLiberacao = new JButton("Liberação de Passagens");
         btLiberacao.setIcon(new ImageIcon(getClass().getResource("/tfd/visao/onibus.png")));
         
+        //definindo labels para barra de status
+        lbUsuario = new JLabel("Usuário: ");
+        lbUsuario.setBounds(10, 5, 63, 20);
+        
+        lbNomeUsuario = new JLabel();
+        lbNomeUsuario.setText("Nome do Usuário");
+        lbNomeUsuario.setBounds(62, 5, 200, 20);
+        
         //Definindo Paineis
-        pnBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 60, 0));
+        pnBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 0));
         pnBotoes.setBackground(Color.GRAY);
         pnBotoes.add(btAgenda);
         pnBotoes.add(btLiberacao);
-        pnBotoes.setBounds(0, 200, 795, 75);
+        pnBotoes.setBounds(0, 440, 1194, 75);
+        
+        pnBarraStatus = new JPanel();
+        pnBarraStatus.setLayout(null);
+        pnBarraStatus.setBounds(0, 639, 1194, 30);
+        pnBarraStatus.setBorder(new EtchedBorder(EtchedBorder.RAISED));
+        pnBarraStatus.add(lbUsuario);
+        pnBarraStatus.add(lbNomeUsuario);
         
         pnFundo = new JPanel();
         pnFundo.setBackground(Color.GRAY);
         pnFundo.setLayout(null);
+        
+        pnFundo.add(lbImagem);
+        
         pnFundo.add(pnBotoes);
+        
+        pnFundo.add(pnBarraStatus);
         
         getContentPane().add(pnFundo);
         mnuMotoristas.addActionListener(this);
