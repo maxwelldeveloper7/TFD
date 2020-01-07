@@ -17,9 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import tfd.controle.Controle;
 
 /**
@@ -32,9 +30,8 @@ public class FrmPrincipal extends JFrame implements ActionListener{
     
     private JMenuBar menu;
     private JMenu mnuCadastros, mnuRelatórios;
-    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes;
-    private JPanel pnFundo, pnBotoes, pnBarraStatus;
-    private JButton btAgenda, btLiberacao;
+    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes, mnuAgendamento;
+    private JPanel pnFundo, pnBarraStatus;
     private JLabel lbImagem, lbUsuario, lbNomeUsuario;
     
     //Método Construtor
@@ -44,7 +41,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension tamanhoDaTela = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da 
-        setBounds((tamanhoDaTela.width - 1200) / 2, (tamanhoDaTela.height - 720) / 2, 1200, 720);//define o tamanho da janela e posiciona ao centro
+        setBounds((tamanhoDaTela.width - 625) / 2, (tamanhoDaTela.height - 500) / 2, 625, 500);//define o tamanho da janela e posiciona ao centro
         setResizable(false);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         construirComponentes();
@@ -64,6 +61,8 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         
         mnuAcompanhantes = new JMenuItem("Acompanhantes", new ImageIcon(getClass().getResource("/tfd/visao/acompanhantes.png")));
         mnuCadastros.add(mnuAcompanhantes);
+        mnuAgendamento = new JMenuItem("Agendamento", new ImageIcon(getClass().getResource("/tfd/visao/agendamento.png")));
+        mnuCadastros.add(mnuAgendamento);
         mnuCidades = new JMenuItem("Cidades", new ImageIcon(getClass().getResource("/tfd/visao/cidades.png")));
         mnuCadastros.add(mnuCidades);        
         mnuClientes = new JMenuItem("Clientes...", new ImageIcon(getClass().getResource("/tfd/visao/clientes.png")));
@@ -81,16 +80,10 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         menu.add(mnuRelatórios);
         
         //definindo imagem de fundo
-        lbImagem = new JLabel(new ImageIcon(getClass().getResource("/tfd/visao/tfd_fundo.png")));
-        lbImagem.setBounds(331, 110, 512, 250);
+        lbImagem = new JLabel(new ImageIcon(getClass().getResource("/tfd/visao/tfdfundo.jpg")));
+        lbImagem.setBounds(10, 10, 600, 400);
         
-        //Inicializando Botões
-        btAgenda = new JButton("Agendamento do Carro");
-        btAgenda.setIcon(new ImageIcon(getClass().getResource("/tfd/visao/carro.png")));
-        
-        btLiberacao = new JButton("Liberação de Passagens");
-        btLiberacao.setIcon(new ImageIcon(getClass().getResource("/tfd/visao/onibus.png")));
-        
+       
         //definindo labels para barra de status
         lbUsuario = new JLabel("Usuário: ");
         lbUsuario.setBounds(10, 5, 63, 20);
@@ -99,27 +92,21 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         lbNomeUsuario.setText("Nome do Usuário");
         lbNomeUsuario.setBounds(62, 5, 200, 20);
         
-        //Definindo Paineis
-        pnBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 0));
-        pnBotoes.setBackground(Color.GRAY);
-        pnBotoes.add(btAgenda);
-        pnBotoes.add(btLiberacao);
-        pnBotoes.setBounds(0, 440, 1194, 75);
+        
         
         pnBarraStatus = new JPanel();
         pnBarraStatus.setLayout(null);
-        pnBarraStatus.setBounds(0, 639, 1194, 30);
+        pnBarraStatus.setBounds(1, 419, 618, 30);
         pnBarraStatus.setBorder(new EtchedBorder(EtchedBorder.RAISED));
+        pnBarraStatus.setBackground(Color.decode("#ADD8E6"));
         pnBarraStatus.add(lbUsuario);
         pnBarraStatus.add(lbNomeUsuario);
         
         pnFundo = new JPanel();
-        pnFundo.setBackground(Color.GRAY);
+        pnFundo.setBackground(Color.decode("#ADD8E6"));
         pnFundo.setLayout(null);
         
-        pnFundo.add(lbImagem);
-        
-        pnFundo.add(pnBotoes);
+        pnFundo.add(lbImagem);        
         
         pnFundo.add(pnBarraStatus);
         
