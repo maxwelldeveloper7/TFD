@@ -6,14 +6,7 @@
 
 package tfd.controle;
 
-import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import tfd.visao.FrmAcompanhante;
 import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;

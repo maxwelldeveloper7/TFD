@@ -182,13 +182,13 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         btCancelar = new JButton("Cancelar", new ImageIcon(getClass().getResource("/tfd/visao/cancelar.png")));
         pnBotoes.add(btCancelar);
 
-        pnBotoes.setBackground(Color.gray);
+        pnBotoes.setBackground(Color.white);
 
         pnFundo = new JPanel(null);
         pnFundo.add(pnTabela);
         pnFundo.add(pnDados);
         pnFundo.add(pnBotoes);
-        pnFundo.setBackground(Color.gray);
+        pnFundo.setBackground(Color.white);
         getContentPane().add(pnFundo);
 
         //registrando eventos

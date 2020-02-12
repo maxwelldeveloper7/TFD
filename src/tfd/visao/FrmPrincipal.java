@@ -45,7 +45,6 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         setResizable(false);        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         construirComponentes();
-        JOptionPane.showMessageDialog(this, "implementar login");
     }
     
     /**
@@ -71,8 +70,8 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros.add(mnuEspecialidades);
         mnuEstabelecimentos = new JMenuItem("Estabelecimentos", new ImageIcon(getClass().getResource("/tfd/visao/estabelecimentos.png")));
         mnuCadastros.add(mnuEstabelecimentos);
-        mnuMotoristas = new JMenuItem("Motoristas", new ImageIcon(getClass().getResource("/tfd/visao/carro16.png")));
-        mnuCadastros.add(mnuMotoristas);
+        //mnuMotoristas = new JMenuItem("Motoristas", new ImageIcon(getClass().getResource("/tfd/visao/carro16.png")));
+        //mnuCadastros.add(mnuMotoristas);
         mnuProcedimentos = new JMenuItem("Procedimentos", new ImageIcon(getClass().getResource("/tfd/visao/procedimentos.png")));
         mnuCadastros.add(mnuProcedimentos);
                 
@@ -111,7 +110,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         pnFundo.add(pnBarraStatus);
         
         getContentPane().add(pnFundo);
-        mnuMotoristas.addActionListener(this);
+        //mnuMotoristas.addActionListener(this);
         mnuCidades.addActionListener(this);
         mnuEspecialidades.addActionListener(this);
         mnuProcedimentos.addActionListener(this);
