@@ -7,17 +7,17 @@
 package tfd.modelo;
 
 
-public class AcompanhateBean {
+public class AcompanhanteBean {
     private Integer id;
     private String nome;
     private String rg;
     private String cpf;
     private String endereco;
 
-    public AcompanhateBean() {
+    public AcompanhanteBean() {
     }
 
-    public AcompanhateBean(Integer id, String nome, String rg, String cpf, String endereco) {
+    public AcompanhanteBean(Integer id, String nome, String rg, String cpf, String endereco) {
         this.id = id;
         this.nome = nome;
         this.rg = rg;
@@ -25,7 +25,7 @@ public class AcompanhateBean {
         this.endereco = endereco;
     }
 
-    public AcompanhateBean(String nome, String rg, String cpf, String endereco) {
+    public AcompanhanteBean(String nome, String rg, String cpf, String endereco) {
         this.nome = nome;
         this.rg = rg;
         this.cpf = cpf;

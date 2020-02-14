@@ -32,10 +32,15 @@ SELECT p.id, p.nomeproc, p.cdespeci, e.nomeespe
 FROM procedimentos p INNER JOIN especialidades e on p.cdespeci = e.id);
 
 
-select * from vpproc where id = 1 order by nomeproc asc*/
+select * from vpproc where id = 1 order by nomeproc asc
 
 CREATE TABLE estabelecimentos (
 id serial primary key not null,
-nomeestabe character varying not null);
+nomeestabe character varying not null);*/
 
-select * from estabelecimentos
+CREATE TABLE acompanhantes(
+id serial primary key not null,
+nomeacomp character varying not null,
+rgacomp character varying(20),
+cpfacomp char(11),
+enderecoacomp character varying);

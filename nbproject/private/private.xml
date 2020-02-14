@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/modelo/CidadeBean.java</file>
-            <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/modelo/AcompanhateBean.java</file>
-            <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/daos/ConexaoPostgres.java</file>
             <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/visao/FrmAcompanhante.java</file>
             <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/visao/FrmPrincipal.java</file>
             <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/controle/Controle.java</file>
-            <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/visao/FrmProcedimentos.java</file>
+            <file>file:/C:/Users/Developer/Documents/NetBeansProjects/TFD/src/tfd/daos/AcompanhanteDao.java</file>
         </group>
     </open-files>
 </project-private>

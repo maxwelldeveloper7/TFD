@@ -33,8 +33,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
+import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
+import tfd.daos.AcompanhanteDao;
 import tfd.daos.EspecialidadeDao;
+import tfd.modelo.AcompanhanteBean;
 import tfd.modelo.EspecialidadeBean;
 
 /**
@@ -54,7 +57,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<EspecialidadeBean> especialidades;
+    private List<AcompanhanteBean> acompanhantes;
     public Integer dml;
     private MaskFormatter ftmCpf;
 
@@ -95,9 +98,15 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
         modelo.addColumn("Nome");
+        modelo.addColumn("RG");
+        modelo.addColumn("CPF");
+        modelo.addColumn("Endereço");
         tabela.setAutoResizeMode(0);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(58);
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(444);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(200);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(200);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
         direita.setHorizontalAlignment(SwingConstants.RIGHT);
         DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
@@ -258,23 +267,29 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        EspecialidadeDao dao = new EspecialidadeDao();
+        AcompanhanteDao dao = new AcompanhanteDao();
 
-        especialidades = dao.listar();
+        acompanhantes = dao.listar();
 
         String[] campos = {null, null, null, null, null};
 
-        for (int i = 0; i < especialidades.size(); i++) {
+        for (int i = 0; i < acompanhantes.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(especialidades.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + especialidades.get(i).getNomeEspecialidade(), i, 1);
+            modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
+            modelo.setValueAt(""+ acompanhantes.get(i).getRg(), i, 2);
+            modelo.setValueAt(""+ acompanhantes.get(i).getCpf(), i, 3);
+            modelo.setValueAt(""+ acompanhantes.get(i).getEndereco(), i, 4);
         }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(especialidades.get(tabela.getSelectedRow()).getId().toString());
-            txAcompanhante.setText(especialidades.get(tabela.getSelectedRow()).getNomeEspecialidade());
+            txId.setText(acompanhantes.get(tabela.getSelectedRow()).getId().toString());
+            txAcompanhante.setText(acompanhantes.get(tabela.getSelectedRow()).getNome());
+            txRg.setText(acompanhantes.get(tabela.getSelectedRow()).getRg());
+            txCpf.setText(acompanhantes.get(tabela.getSelectedRow()).getCpf());
+            txEndereco.setText(acompanhantes.get(tabela.getSelectedRow()).getEndereco());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -285,6 +300,9 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     private void limparDados() {
         txId.setText("");
         txAcompanhante.setText("");
+        txRg.setText("");
+        txCpf.setText("");
+        txEndereco.setText("");
     }
 
     private void habilitarCampos(boolean habilitar) {
@@ -304,7 +322,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        especialidades = null;
+        acompanhantes = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -318,18 +336,18 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
     private void salvar() {
 
-        EspecialidadeDao dao = new EspecialidadeDao();
+        AcompanhanteDao dao = new AcompanhanteDao();
         
         if (dml == 1) {
-            EspecialidadeBean c = new EspecialidadeBean(txAcompanhante.getText());
-            if (dao.inserir(c)) {
+            AcompanhanteBean a = new AcompanhanteBean(txAcompanhante.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
+            if (dao.inserir(a)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
         if (dml == 2) {
-            EspecialidadeBean c = new EspecialidadeBean(Integer.parseInt(txId.getText()), txAcompanhante.getText());
-            if (dao.alterar(c)) {
+            AcompanhanteBean a = new AcompanhanteBean(Integer.parseInt(txId.getText()), txAcompanhante.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
+            if (dao.alterar(a)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -338,7 +356,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     }
 
     private void excluir() {
-        EspecialidadeDao dao = new EspecialidadeDao();
+        AcompanhanteDao dao = new AcompanhanteDao();
         
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         
