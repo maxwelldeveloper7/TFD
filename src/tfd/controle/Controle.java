@@ -12,6 +12,7 @@ import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;
 import tfd.visao.FrmEstabelecimentos;
 import tfd.visao.FrmMotoristas;
+import tfd.visao.FrmPacientes;
 import tfd.visao.FrmPrincipal;
 import tfd.visao.FrmProcedimentos;
 
@@ -29,6 +30,7 @@ public class Controle {
     public static FrmProcedimentos procedimentos = null;
     public static FrmEstabelecimentos estabelecimentos = null;
     public static FrmAcompanhante acompanhantes = null;
+    public static FrmPacientes pacientes = null;
     
     private Controle(){
     }
@@ -101,5 +103,12 @@ public class Controle {
             acompanhantes = new FrmAcompanhante(parent, modal);
         }
         acompanhantes.setVisible(true);
+    }
+    
+    public static void abreFrmPacientes(JFrame parent, boolean modal){
+        if(pacientes == null){
+            pacientes = new FrmPacientes(parent, modal);
+        }
+        pacientes.setVisible(true);
     }
 }

@@ -2,20 +2,17 @@ package tfd.visao;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import tfd.controle.Controle;
@@ -30,7 +27,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
     
     private JMenuBar menu;
     private JMenu mnuCadastros, mnuRelatórios;
-    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuClientes, mnuAcompanhantes, mnuAgendamento;
+    private JMenuItem mnuCidades, mnuMotoristas, mnuEstabelecimentos, mnuEspecialidades, mnuProcedimentos, mnuPacientes, mnuAcompanhantes, mnuAgendamento;
     private JPanel pnFundo, pnBarraStatus;
     private JLabel lbImagem, lbUsuario, lbNomeUsuario;
     
@@ -64,8 +61,8 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuCadastros.add(mnuAgendamento);
         mnuCidades = new JMenuItem("Cidades", new ImageIcon(getClass().getResource("/tfd/visao/cidades.png")));
         mnuCadastros.add(mnuCidades);        
-        mnuClientes = new JMenuItem("Clientes...", new ImageIcon(getClass().getResource("/tfd/visao/clientes.png")));
-        mnuCadastros.add(mnuClientes);
+        mnuPacientes = new JMenuItem("Pacientes", new ImageIcon(getClass().getResource("/tfd/visao/clientes.png")));
+        mnuCadastros.add(mnuPacientes);
         mnuEspecialidades = new JMenuItem("Especialidades", new ImageIcon(getClass().getResource("/tfd/visao/especialidades.png")));
         mnuCadastros.add(mnuEspecialidades);
         mnuEstabelecimentos = new JMenuItem("Estabelecimentos", new ImageIcon(getClass().getResource("/tfd/visao/estabelecimentos.png")));
@@ -116,6 +113,7 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         mnuProcedimentos.addActionListener(this);
         mnuEstabelecimentos.addActionListener(this);
         mnuAcompanhantes.addActionListener(this);
+        mnuPacientes.addActionListener(this);
     }    
     
     @Override
@@ -139,6 +137,9 @@ public class FrmPrincipal extends JFrame implements ActionListener{
         }
         if(e.getSource() == mnuAcompanhantes){
             Controle.abreFrmAcompanhates(this, true);
+        }
+        if(e.getSource() == mnuPacientes){
+            Controle.abreFrmPacientes(this, true);
         }
     }
     
