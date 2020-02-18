@@ -339,14 +339,14 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         AcompanhanteDao dao = new AcompanhanteDao();
         
         if (dml == 1) {
-            AcompanhanteBean a = new AcompanhanteBean(txAcompanhante.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
+            AcompanhanteBean a = new AcompanhanteBean(txAcompanhante.getText(), txRg.getText().trim().toUpperCase(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
             if (dao.inserir(a)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
         if (dml == 2) {
-            AcompanhanteBean a = new AcompanhanteBean(Integer.parseInt(txId.getText()), txAcompanhante.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
+            AcompanhanteBean a = new AcompanhanteBean(Integer.parseInt(txId.getText()), txAcompanhante.getText(), txRg.getText().trim().toUpperCase(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
             if (dao.alterar(a)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }

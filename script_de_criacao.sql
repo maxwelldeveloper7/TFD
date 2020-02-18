@@ -36,11 +36,23 @@ select * from vpproc where id = 1 order by nomeproc asc
 
 CREATE TABLE estabelecimentos (
 id serial primary key not null,
-nomeestabe character varying not null);*/
+nomeestabe character varying not null);
 
 CREATE TABLE acompanhantes(
 id serial primary key not null,
 nomeacomp character varying not null,
-rgacomp character varying(20),
-cpfacomp char(11),
-enderecoacomp character varying);
+rgacomp character varying(50) unique,
+cpfacomp char(11) unique,
+enderecoacomp character varying);*/
+
+CREATE TABLE pacientes(
+id bigserial primary key not null,
+nomepa character varying not null,
+cns char(15) unique not null,
+rgpa character varying(50) unique not null,
+cpfpa char(11) unique,
+dtnascimento date not null,
+paipa character varying,
+maepa character varying,
+enderecopa character varying
+);

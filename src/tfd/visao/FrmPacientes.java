@@ -98,15 +98,15 @@ public class FrmPacientes extends JDialog implements ActionListener {
         tabela = new JTable(modelo);
         modelo.addColumn("ID");
         modelo.addColumn("Nome");
+        modelo.addColumn("Cartão SUS");
         modelo.addColumn("RG");
         modelo.addColumn("CPF");
-        modelo.addColumn("Endereço");
         tabela.setAutoResizeMode(0);
         tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
         tabela.getColumnModel().getColumn(1).setPreferredWidth(200);
         tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
         tabela.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tabela.getColumnModel().getColumn(4).setPreferredWidth(200);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(100);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
         direita.setHorizontalAlignment(SwingConstants.RIGHT);
         DefaultTableCellRenderer esquerda = new DefaultTableCellRenderer();
