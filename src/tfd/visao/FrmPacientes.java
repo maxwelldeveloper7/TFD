@@ -36,9 +36,9 @@ import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
 import tfd.daos.AcompanhanteDao;
-import tfd.daos.EspecialidadeDao;
+import tfd.daos.PacienteDao;
 import tfd.modelo.AcompanhanteBean;
-import tfd.modelo.EspecialidadeBean;
+import tfd.modelo.PacienteBean;
 
 /**
  *
@@ -57,7 +57,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
     private ListSelectionModel lms;
     private JTable tabela;
     private JScrollPane barraRolagem;
-    private List<AcompanhanteBean> acompanhantes;
+    private List<PacienteBean> pacientes;
     public Integer dml;
     private MaskFormatter ftmCpf, ftmCartaoSus, ftmData, ftmTelefone;
 
@@ -82,8 +82,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         };
         
         construirComponentes();
-        habilitarCampos(false);
-        resetarFormulario();
+        habilitarCampos(false);       
     }
 
     //Inicializando, definindo e posicionando componentes
@@ -104,7 +103,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         tabela.setAutoResizeMode(0);
         tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
         tabela.getColumnModel().getColumn(1).setPreferredWidth(200);
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(110);
         tabela.getColumnModel().getColumn(3).setPreferredWidth(100);
         tabela.getColumnModel().getColumn(4).setPreferredWidth(100);
         DefaultTableCellRenderer direita = new DefaultTableCellRenderer();
@@ -254,18 +253,23 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
         //Contruindo botões
         btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
+        btInserir.setEnabled(true);
         pnBotoes.add(btInserir);
 
         btEditar = new JButton("Editar", new ImageIcon(getClass().getResource("/tfd/visao/editar.png")));
+        btEditar.setEnabled(false);
         pnBotoes.add(btEditar);
 
         btExcluir = new JButton("Excluir", new ImageIcon(getClass().getResource("/tfd/visao/deletar.png")));
+        btExcluir.setEnabled(false);
         pnBotoes.add(btExcluir);
 
         btSalvar = new JButton("Salvar", new ImageIcon(getClass().getResource("/tfd/visao/salvar.png")));
+        btSalvar.setEnabled(false);
         pnBotoes.add(btSalvar);
 
         btCancelar = new JButton("Cancelar", new ImageIcon(getClass().getResource("/tfd/visao/cancelar.png")));
+        btCancelar.setEnabled(false);
         pnBotoes.add(btCancelar);
 
         pnBotoes.setBackground(Color.white);
@@ -317,7 +321,8 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                
+                System.out.println("Atualizar tabela");
+                resetarFormulario();
             }
 
             @Override
@@ -332,29 +337,34 @@ public class FrmPacientes extends JDialog implements ActionListener {
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        AcompanhanteDao dao = new AcompanhanteDao();
+        PacienteDao dao = new PacienteDao();
 
-        acompanhantes = dao.listar();
+        pacientes = dao.listar();
 
         String[] campos = {null, null, null, null, null};
 
-        for (int i = 0; i < acompanhantes.size(); i++) {
+        for (int i = 0; i < pacientes.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
-            modelo.setValueAt(""+ acompanhantes.get(i).getRg(), i, 2);
-            modelo.setValueAt(""+ acompanhantes.get(i).getCpf(), i, 3);
-            modelo.setValueAt(""+ acompanhantes.get(i).getEndereco(), i, 4);
+            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
+            modelo.setValueAt(""+ pacientes.get(i).getCns(), i, 2);
+            modelo.setValueAt(""+ pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt(""+ pacientes.get(i).getCpf(), i, 4);
         }
     }
 
     private void linhaSelecionadaTabela() {
         if (tabela.getSelectedRow() != -1) {
-            txId.setText(acompanhantes.get(tabela.getSelectedRow()).getId().toString());
-            txPaciente.setText(acompanhantes.get(tabela.getSelectedRow()).getNome());
-            txRg.setText(acompanhantes.get(tabela.getSelectedRow()).getRg());
-            txCpf.setText(acompanhantes.get(tabela.getSelectedRow()).getCpf());
-            txEndereco.setText(acompanhantes.get(tabela.getSelectedRow()).getEndereco());
+            txId.setText(pacientes.get(tabela.getSelectedRow()).getId().toString());
+            txPaciente.setText(pacientes.get(tabela.getSelectedRow()).getNome());
+            txCartaoSus.setText(pacientes.get(tabela.getSelectedRow()).getCns());
+            txPai.setText(pacientes.get(tabela.getSelectedRow()).getNomePai());
+            txMae.setText(pacientes.get(tabela.getSelectedRow()).getNomeMae());
+            txRg.setText(pacientes.get(tabela.getSelectedRow()).getRg());
+            txCpf.setText(pacientes.get(tabela.getSelectedRow()).getCpf());
+            txDtNascimento.setText(pacientes.get(tabela.getSelectedRow()).getNascimentoStr());
+            txTelefone.setText(pacientes.get(tabela.getSelectedRow()).getTelefone());
+            txEndereco.setText(pacientes.get(tabela.getSelectedRow()).getEndereco());
             habilitarEdicaoExclusao(true);
         } else {
             habilitarEdicaoExclusao(false);
@@ -397,7 +407,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        acompanhantes = null;
+        pacientes = null;
         dml = null;
         pesquisar(modelo);
         btInserir.requestFocus();
@@ -411,18 +421,18 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
     private void salvar() {
 
-        AcompanhanteDao dao = new AcompanhanteDao();
+        PacienteDao dao = new PacienteDao();
         
         if (dml == 1) {
-            AcompanhanteBean a = new AcompanhanteBean(txPaciente.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
-            if (dao.inserir(a)) {
+            PacienteBean p = new PacienteBean(txPaciente.getText().trim(), txCartaoSus.getText().trim(), txCpf.getText(), txRg.getText().trim().toUpperCase(), txTelefone.getText(), txPai.getText().trim(), txMae.getText().trim(), Utilidades.formataDataSQL(txDtNascimento.getText()), txEndereco.getText().trim());
+            if (dao.inserir(p)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
         if (dml == 2) {
-            AcompanhanteBean a = new AcompanhanteBean(Integer.parseInt(txId.getText()), txPaciente.getText(), txRg.getText().trim(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
-            if (dao.alterar(a)) {
+            PacienteBean p = new PacienteBean(Integer.parseInt(txId.getText()), txPaciente.getText().trim(), txCartaoSus.getText(), txCpf.getText(), txRg.getText().trim().toUpperCase(), txTelefone.getText(), txPai.getText().trim(), txMae.getText().trim(), Utilidades.formataDataSQL(txDtNascimento.getText()), txEndereco.getText().trim());
+            if (dao.alterar(p)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -431,7 +441,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
     }
 
     private void excluir() {
-        AcompanhanteDao dao = new AcompanhanteDao();
+        PacienteDao dao = new PacienteDao();
         
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         

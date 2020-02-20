@@ -24,11 +24,25 @@ public class PacienteBean {
     private String nomePai;
     private String nomeMae;
     private Date nascimento;
+    private String endereco;
 
     public PacienteBean() {
     }
 
-    public PacienteBean(Integer id, String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento) {
+    public PacienteBean(String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento, String endereco) {
+        this.nome = nome;
+        this.cns = cns;
+        this.cpf = cpf;
+        this.rg = rg;
+        this.telefone = telefone;
+        this.nomePai = nomePai;
+        this.nomeMae = nomeMae;
+        this.nascimento = nascimento;
+        this.endereco = endereco;
+        this.telefone = telefone;
+    }
+
+    public PacienteBean(Integer id, String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento, String endereco) {
         this.id = id;
         this.nome = nome;
         this.cns = cns;
@@ -38,18 +52,11 @@ public class PacienteBean {
         this.nomePai = nomePai;
         this.nomeMae = nomeMae;
         this.nascimento = nascimento;
+        this.endereco = endereco;
+        
     }
 
-    public PacienteBean(String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento) {
-        this.nome = nome;
-        this.cns = cns;
-        this.cpf = cpf;
-        this.rg = rg;
-        this.telefone = telefone;
-        this.nomePai = nomePai;
-        this.nomeMae = nomeMae;
-        this.nascimento = nascimento;
-    }
+    
 
     public Integer getId() {
         return id;
@@ -126,4 +133,16 @@ public class PacienteBean {
     public void setNascimento(String nascimento) {
         this.nascimento = Utilidades.formataDataSQL(nascimento);
     }
+    
+    public void setNascimento(Date nascimento) {
+        this.nascimento = nascimento;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }    
 }

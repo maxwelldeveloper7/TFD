@@ -54,5 +54,7 @@ cpfpa char(11) unique,
 dtnascimento date not null,
 paipa character varying,
 maepa character varying,
+telefonepa character(11),
 enderecopa character varying
 );
+
