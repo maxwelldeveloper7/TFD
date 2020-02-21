@@ -15,7 +15,6 @@ public class PacienteDao extends GenericDAO{
     private ResultSet rs = null;
     
     public boolean inserir(PacienteBean p){
-        System.out.println(p.getNome()+"" +p.getCns()+"" +p.getRg()+""+ p.getCpf()+""+ p.getNascimento()+""+ p.getNomePai()+""+ p.getNomeMae()+""+ p.getTelefone()+""+ p.getEndereco());
         String sql = "INSERT INTO pacientes(nomepa, cns, rgpa, cpfpa, dtnascimento, paipa, maepa, telefonepa, enderecopa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return executeCommand(sql, p.getNome(), p.getCns(), p.getRg(), p.getCpf(), p.getNascimento(), p.getNomePai(), p.getNomeMae(), p.getTelefone(), p.getEndereco());
     }

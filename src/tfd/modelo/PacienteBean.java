@@ -75,7 +75,7 @@ public class PacienteBean {
     }
 
     public String getCns() {
-        return cns;
+        return Utilidades.getDigitos(cns);
     }
 
     public void setCns(String cns) {
@@ -83,7 +83,7 @@ public class PacienteBean {
     }
 
     public String getCpf() {
-        return cpf;
+        return Utilidades.getDigitos(cpf);
     }
 
     public void setCpf(String cpf) {
@@ -99,7 +99,7 @@ public class PacienteBean {
     }
 
     public String getTelefone() {
-        return telefone;
+        return Utilidades.getDigitos(telefone);
     }
 
     public void setTelefone(String telefone) {

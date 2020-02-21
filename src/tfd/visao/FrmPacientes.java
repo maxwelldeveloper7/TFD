@@ -321,7 +321,6 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                System.out.println("Atualizar tabela");
                 resetarFormulario();
             }
 
@@ -424,7 +423,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         PacienteDao dao = new PacienteDao();
         
         if (dml == 1) {
-            PacienteBean p = new PacienteBean(txPaciente.getText().trim(), txCartaoSus.getText().trim(), txCpf.getText(), txRg.getText().trim().toUpperCase(), txTelefone.getText(), txPai.getText().trim(), txMae.getText().trim(), Utilidades.formataDataSQL(txDtNascimento.getText()), txEndereco.getText().trim());
+            PacienteBean p = new PacienteBean(txPaciente.getText().trim(), txCartaoSus.getText(), txCpf.getText(), txRg.getText().trim().toUpperCase(), txTelefone.getText(), txPai.getText().trim(), txMae.getText().trim(), Utilidades.formataDataSQL(txDtNascimento.getText()), txEndereco.getText().trim());
             if (dao.inserir(p)) {
                 JOptionPane.showMessageDialog(this, "Cadastro salvo com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
