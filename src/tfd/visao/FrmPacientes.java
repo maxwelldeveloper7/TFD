@@ -35,9 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
-import tfd.daos.AcompanhanteDao;
 import tfd.daos.PacienteDao;
-import tfd.modelo.AcompanhanteBean;
 import tfd.modelo.PacienteBean;
 
 /**
@@ -49,7 +47,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
     //Declarando componentes
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
-    private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir;
+    private JButton btMostrarTodos, btPesquisar, btInserir, btEditar, btSalvar, btCancelar, btExcluir;
     private JTextField txId, txPaciente, txRg, txEndereco, txMae, txPai;
     private JLabel lbId, lbPaciente, lbRg, lbCpf, lbEndereco, lbCartaoSus, lbDtNascimento, lbTelefone, lbMae, lbPai;
     private JFormattedTextField txCpf, txCartaoSus, txDtNascimento, txTelefone;
@@ -60,6 +58,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
     private List<PacienteBean> pacientes;
     public Integer dml;
     private MaskFormatter ftmCpf, ftmCartaoSus, ftmData, ftmTelefone;
+    private String nomeParaPesquisar;
 
     //Método construtor
     public FrmPacientes(JFrame parent, boolean modal) {
@@ -69,10 +68,10 @@ public class FrmPacientes extends JDialog implements ActionListener {
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
-        setBounds((screenSize.width - 544) / 2, (screenSize.height - 510) / 2, 544, 510);//define o tamanho da janela e posiciona ao centro
+        setBounds((screenSize.width - 544) / 2, (screenSize.height - 600) / 2, 544, 600);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
-        
+
         //impossibilita edição da tabela
         this.modelo = new DefaultTableModel() {
             @Override
@@ -80,16 +79,24 @@ public class FrmPacientes extends JDialog implements ActionListener {
                 return false;
             }
         };
-        
+
         construirComponentes();
-        habilitarCampos(false);       
+        habilitarCampos(false);
     }
 
     //Inicializando, definindo e posicionando componentes
     private void construirComponentes() {
+        //Construindo botões de Mostra tudo e Pesquisar
+
+        btMostrarTodos = new JButton("Mostrar Todos", new ImageIcon(getClass().getResource("/tfd/visao/mostrartodos.png")));
+        btMostrarTodos.setBounds(5, 6, 145, 30);
+
+        btPesquisar = new JButton("Pesquisar", new ImageIcon(getClass().getResource("/tfd/visao/pesquisar.png")));
+        btPesquisar.setBounds(155, 6, 145, 30);
+
         //painel que conterá a tabela
         pnTabela = new JPanel(null);
-        pnTabela.setBounds(4, 4, 530, 200);
+        pnTabela.setBounds(4, 43, 530, 250);
         bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Pacientes");
         pnTabela.setBorder(bordaTabela);
 
@@ -124,13 +131,14 @@ public class FrmPacientes extends JDialog implements ActionListener {
                 }
             }
         });
+
         barraRolagem = new JScrollPane(tabela);
-        barraRolagem.setBounds(5, 17, 520, 178);
+        barraRolagem.setBounds(5, 17, 520, 228);
         pnTabela.add(barraRolagem);
 
         //Painel que conterá o formulário de dados
         pnDados = new JPanel(null);
-        pnDados.setBounds(4, 208, 530, 230);
+        pnDados.setBounds(4, 298, 530, 230);
         bordaDados = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Dados");
         pnDados.setBorder(bordaDados);
 
@@ -149,31 +157,31 @@ public class FrmPacientes extends JDialog implements ActionListener {
         txPaciente = new JTextField();
         txPaciente.setBounds(80, 40, 245, 20);
         pnDados.add(txPaciente);
-        
+
         lbCartaoSus = new JLabel("Cartão SUS:");
         lbCartaoSus.setBounds(345, 20, 100, 20);
         pnDados.add(lbCartaoSus);
-        
-        try{
+
+        try {
             ftmCartaoSus = new MaskFormatter("  ###  ####  ####  ####");
             ftmCartaoSus.setValidCharacters("0123456789");
-        } catch(ParseException e){
+        } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txCartaoSus = new JFormattedTextField(ftmCartaoSus);
         txCartaoSus.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txCartaoSus.setColumns(15);
         txCartaoSus.setBounds(345, 40, 140, 20);
         pnDados.add(txCartaoSus);
-        
+
         lbMae = new JLabel("Mãe:");
         lbMae.setBounds(10, 70, 120, 20);
         pnDados.add(lbMae);
         txMae = new JTextField();
         txMae.setBounds(10, 90, 245, 20);
         pnDados.add(txMae);
-        
+
         lbPai = new JLabel("Pai:");
         lbPai.setBounds(275, 70, 120, 20);
         pnDados.add(lbPai);
@@ -187,69 +195,69 @@ public class FrmPacientes extends JDialog implements ActionListener {
         txRg = new JTextField();
         txRg.setBounds(10, 140, 100, 20);
         pnDados.add(txRg);
-        
+
         lbCpf = new JLabel("CPF:");
         lbCpf.setBounds(130, 120, 100, 20);
         pnDados.add(lbCpf);
-        
+
         try {
             ftmCpf = new MaskFormatter("###.###.###-##");
             ftmCpf.setValidCharacters("0123456789");
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txCpf = new JFormattedTextField(ftmCpf);
         txCpf.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txCpf.setColumns(11);
         txCpf.setBounds(130, 140, 100, 20);
         pnDados.add(txCpf);
-        
+
         lbDtNascimento = new JLabel("Nascimento:");
         lbDtNascimento.setBounds(250, 120, 200, 20);
         pnDados.add(lbDtNascimento);
-        
+
         try {
             ftmData = new MaskFormatter("##/##/####");
             ftmData.setValidCharacters("0123456789");
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txDtNascimento = new JFormattedTextField(ftmData);
         txDtNascimento.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txDtNascimento.setColumns(8);
         txDtNascimento.setBounds(250, 140, 80, 20);
         pnDados.add(txDtNascimento);
-        
+
         lbTelefone = new JLabel("Celular:");
         lbTelefone.setBounds(350, 120, 100, 20);
         pnDados.add(lbTelefone);
-        
+
         try {
             ftmTelefone = new MaskFormatter("(##)#####-####");
             ftmTelefone.setValidCharacters("0123456789");
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txTelefone = new JFormattedTextField(ftmTelefone);
         txTelefone.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txTelefone.setColumns(11);
         txTelefone.setBounds(350, 140, 100, 20);
         pnDados.add(txTelefone);
-        
+
         lbEndereco = new JLabel("Endereço:");
         lbEndereco.setBounds(10, 170, 100, 20);
         pnDados.add(lbEndereco);
-        
+
         txEndereco = new JTextField();
         txEndereco.setBounds(10, 190, 510, 20);
         pnDados.add(txEndereco);
-        
+
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
-        pnBotoes.setBounds(4, 440, 530, 38);
+        pnBotoes.setBounds(4, 530, 530, 38);
 
         //Contruindo botões
         btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
@@ -275,6 +283,8 @@ public class FrmPacientes extends JDialog implements ActionListener {
         pnBotoes.setBackground(Color.white);
 
         pnFundo = new JPanel(null);
+        pnFundo.add(btMostrarTodos);
+        pnFundo.add(btPesquisar);
         pnFundo.add(pnTabela);
         pnFundo.add(pnDados);
         pnFundo.add(pnBotoes);
@@ -282,6 +292,8 @@ public class FrmPacientes extends JDialog implements ActionListener {
         getContentPane().add(pnFundo);
 
         //registrando eventos
+        btMostrarTodos.addActionListener(this);
+        btPesquisar.addActionListener(this);
         btInserir.addActionListener(this);
         btEditar.addActionListener(this);
         btExcluir.addActionListener(this);
@@ -291,32 +303,32 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             @Override
             public void windowOpened(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowClosing(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                 Controle.especialidades = null;
-                 
-                 if(Controle.procedimentos != null){
-                     Controle.procedimentos.carregaCbEspecialidade();
-                     Controle.procedimentos.cbEspecialidade.requestFocus();
-                 }
+                Controle.especialidades = null;
+
+                if (Controle.procedimentos != null) {
+                    Controle.procedimentos.carregaCbEspecialidade();
+                    Controle.procedimentos.cbEspecialidade.requestFocus();
+                }
             }
 
             @Override
             public void windowIconified(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                
+
             }
 
             @Override
@@ -326,15 +338,13 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             @Override
             public void windowDeactivated(WindowEvent e) {
-                
+
             }
         });
     }
-    
-    
 
     //tratando eventos    
-    private void pesquisar(DefaultTableModel modelo) {
+    private void listar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         PacienteDao dao = new PacienteDao();
 
@@ -346,10 +356,34 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt(""+ pacientes.get(i).getCns(), i, 2);
-            modelo.setValueAt(""+ pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt(""+ pacientes.get(i).getCpf(), i, 4);
+            modelo.setValueAt("" + pacientes.get(i).getCns(), i, 2);
+            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt("" + pacientes.get(i).getCpf(), i, 4);
         }
+    }
+
+    private void pesquisar(DefaultTableModel modelo) {
+        modelo.setNumRows(0);
+        PacienteDao dao = new PacienteDao();
+
+        pacientes = dao.listar(nomeParaPesquisar);
+
+        String[] campos = {null, null, null, null, null};
+
+        for (int i = 0; i < pacientes.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + pacientes.get(i).getCns(), i, 2);
+            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt("" + pacientes.get(i).getCpf(), i, 4);
+        }
+        
+        if (pacientes.isEmpty()){
+            modelo.addRow(campos);
+            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+        }
+        nomeParaPesquisar = null;
     }
 
     private void linhaSelecionadaTabela() {
@@ -386,8 +420,10 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
     private void habilitarCampos(boolean habilitar) {
         txPaciente.setEnabled(habilitar);
-        tabela.setEnabled(!habilitar);        
-        if(habilitar)txPaciente.requestFocus();
+        tabela.setEnabled(!habilitar);
+        if (habilitar) {
+            txPaciente.requestFocus();
+        }
         txCartaoSus.setEnabled(habilitar);
         txMae.setEnabled(habilitar);
         txPai.setEnabled(habilitar);
@@ -406,9 +442,9 @@ public class FrmPacientes extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        pacientes = null;
+        //pacientes = null;
         dml = null;
-        pesquisar(modelo);
+        tabela.clearSelection();//pesquisar(modelo);
         btInserir.requestFocus();
     }
 
@@ -421,7 +457,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
     private void salvar() {
 
         PacienteDao dao = new PacienteDao();
-        
+
         if (dml == 1) {
             PacienteBean p = new PacienteBean(txPaciente.getText().trim(), txCartaoSus.getText(), txCpf.getText(), txRg.getText().trim().toUpperCase(), txTelefone.getText(), txPai.getText().trim(), txMae.getText().trim(), Utilidades.formataDataSQL(txDtNascimento.getText()), txEndereco.getText().trim());
             if (dao.inserir(p)) {
@@ -435,15 +471,15 @@ public class FrmPacientes extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        
+
         resetarFormulario();
     }
 
     private void excluir() {
         PacienteDao dao = new PacienteDao();
-        
+
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
+
         if (resposta == 0) {
             if (dao.excluir(Integer.parseInt(txId.getText().trim()))) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
@@ -477,6 +513,22 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btMostrarTodos) {
+            listar(modelo);
+        }
+
+        if (e.getSource() == btPesquisar) {
+            nomeParaPesquisar = "";
+            nomeParaPesquisar = JOptionPane.showInputDialog(this, "Informe o nome do Paciente:");
+            if (nomeParaPesquisar != null && !nomeParaPesquisar.isEmpty()) {
+                pesquisar(modelo);
+            } else {
+                if (nomeParaPesquisar != null) {
+                    JOptionPane.showMessageDialog(this, "Você precisa informar o nome do paciente!", "Mensagem do Sistema", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+        }
         if (e.getSource() == btInserir) {
             inserir();
         }
@@ -497,9 +549,9 @@ public class FrmPacientes extends JDialog implements ActionListener {
             resetarFormulario();
         }
     }
-    
+
     private boolean validarFormulario() {
-        if(txPaciente.getText().trim().equals("")){
+        if (txPaciente.getText().trim().equals("")) {
             txPaciente.requestFocus();
             return false;
         }

@@ -56,4 +56,34 @@ public class PacienteDao extends GenericDAO{
         }
         return lista;
     }
+    
+    
+    public ArrayList<PacienteBean> listar(String nome){
+        ArrayList<PacienteBean> lista = new ArrayList<>();
+        String sql = "SELECT * FROM pacientes WHERE nomepa LIKE ? order by nomepa asc";
+        
+        try {
+            pstm = ConexaoPostgres.conectar().prepareStatement(sql);
+            pstm.setString(1, nome+"%");
+            rs = pstm.executeQuery();
+            
+            while (rs.next()) {                
+                PacienteBean p = new PacienteBean();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nomepa"));
+                p.setCns(rs.getString("cns"));
+                p.setRg(rs.getString("rgpa"));
+                p.setCpf(rs.getString("cpfpa"));
+                p.setNascimento(rs.getDate("dtnascimento"));
+                p.setNomePai(rs.getString("paipa"));
+                p.setNomeMae(rs.getString("maepa"));
+                p.setTelefone(rs.getString("telefonepa"));
+                p.setEndereco(rs.getString("enderecopa"));
+                lista.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Falha ao listar pacientes; "+e.getMessage());
+        }
+        return lista;
+    }
 }

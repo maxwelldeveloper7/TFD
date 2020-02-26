@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -32,9 +31,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import tfd.controle.Controle;
-import tfd.daos.EspecialidadeDao;
 import tfd.daos.EstabelecimentoDao;
-import tfd.modelo.EspecialidadeBean;
 import tfd.modelo.EstabelecimentoBean;
 
 /**
