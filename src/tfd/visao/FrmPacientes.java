@@ -473,6 +473,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         }
 
         resetarFormulario();
+        modelo.setNumRows(0);
     }
 
     private void excluir() {

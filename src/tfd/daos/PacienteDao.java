@@ -64,7 +64,7 @@ public class PacienteDao extends GenericDAO{
         
         try {
             pstm = ConexaoPostgres.conectar().prepareStatement(sql);
-            pstm.setString(1, nome+"%");
+            pstm.setString(1,"%"+ nome +"%");
             rs = pstm.executeQuery();
             
             while (rs.next()) {                
