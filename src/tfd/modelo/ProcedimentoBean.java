@@ -6,6 +6,8 @@
 
 package tfd.modelo;
 
+import tfd.Utilidades.Utilidades;
+
 /**
  *
  * @author Developer
@@ -21,12 +23,12 @@ public class ProcedimentoBean {
     
     public ProcedimentoBean(Integer id, String nomeProcedimento, EspecialidadeBean especialidade) {
         this.id = id;
-        this.nomeProcedimento = nomeProcedimento;
+        this.nomeProcedimento = Utilidades.iniciaisMaiuscula(nomeProcedimento);
         this.especialidade = especialidade;
     }
 
     public ProcedimentoBean(String nomeProcedimento, EspecialidadeBean especialidade) {
-        this.nomeProcedimento = nomeProcedimento;
+        this.nomeProcedimento = Utilidades.iniciaisMaiuscula(nomeProcedimento);
         this.especialidade = especialidade;
     }
 
@@ -43,7 +45,7 @@ public class ProcedimentoBean {
     }
 
     public void setNomeProcedimento(String nomeProcedimento) {
-        this.nomeProcedimento = nomeProcedimento;
+        this.nomeProcedimento = Utilidades.iniciaisMaiuscula(nomeProcedimento);
     }
 
     public EspecialidadeBean getEspecialidade() {

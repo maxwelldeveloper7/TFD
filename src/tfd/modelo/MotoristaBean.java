@@ -25,14 +25,14 @@ public class MotoristaBean {
 
     public MotoristaBean(Integer id, String nomeMotorista, String telefone, boolean ativo) {
         this.id = id;
-        this.nomeMotorista = nomeMotorista;
+        this.nomeMotorista = Utilidades.iniciaisMaiuscula(nomeMotorista);
         this.telefone = telefone;
         this.ativo = ativo;
     }
     
     public MotoristaBean(Integer id, String nomeMotorista, String telefone, String ativo) {
         this.id = id;
-        this.nomeMotorista = nomeMotorista;
+        this.nomeMotorista = Utilidades.iniciaisMaiuscula(nomeMotorista);;
         this.telefone = telefone;
         this.setAtivo(ativo);
     }
@@ -60,7 +60,7 @@ public class MotoristaBean {
     }
 
     public void setNomeMotorista(String nomeMotorista) {
-        this.nomeMotorista = nomeMotorista;
+        this.nomeMotorista = Utilidades.iniciaisMaiuscula(nomeMotorista);;
     }
 
     public String getTelefone() {

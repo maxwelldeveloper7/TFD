@@ -6,6 +6,8 @@
 
 package tfd.modelo;
 
+import tfd.Utilidades.Utilidades;
+
 /**
  *
  * @author Developer
@@ -19,11 +21,11 @@ public class EstabelecimentoBean {
 
     public EstabelecimentoBean(Integer id, String nomeEstabelecimento) {
         this.id = id;
-        this.nomeEstabelecimento = nomeEstabelecimento;
+        this.nomeEstabelecimento = Utilidades.iniciaisMaiuscula(nomeEstabelecimento);
     }
 
     public EstabelecimentoBean(String nomeEstabelecimento) {
-        this.nomeEstabelecimento = nomeEstabelecimento;
+        this.nomeEstabelecimento = Utilidades.iniciaisMaiuscula(nomeEstabelecimento);
     }
 
     public Integer getId() {
@@ -39,6 +41,6 @@ public class EstabelecimentoBean {
     }
 
     public void setNomeEstabelecimento(String nomeEstabelecimento) {
-        this.nomeEstabelecimento = nomeEstabelecimento;
+        this.nomeEstabelecimento = Utilidades.iniciaisMaiuscula(nomeEstabelecimento);
     }
 }

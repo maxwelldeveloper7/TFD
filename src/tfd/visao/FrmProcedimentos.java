@@ -36,7 +36,6 @@ import tfd.controle.Controle;
 import tfd.daos.CidadeDao;
 import tfd.daos.EspecialidadeDao;
 import tfd.daos.ProcedimentoDao;
-import tfd.modelo.CidadeBean;
 import tfd.modelo.EspecialidadeBean;
 import tfd.modelo.ProcedimentoBean;
 

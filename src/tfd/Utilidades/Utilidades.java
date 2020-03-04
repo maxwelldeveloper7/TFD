@@ -365,7 +365,7 @@ public class Utilidades {
         return result;
     }
     
-    public String caixaAlta(String nome) {
+    public static String iniciaisMaiuscula(String nome) {
         
         String nomeCompleto = "";
 

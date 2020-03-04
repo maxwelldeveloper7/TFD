@@ -1,5 +1,7 @@
 package tfd.modelo;
 
+import tfd.Utilidades.Utilidades;
+
 /**
  *
  * @author Maxwell
@@ -15,12 +17,12 @@ public class CidadeBean {
 
     public CidadeBean(Integer id, String nomeCidade, String uf) {
         this.id = id;
-        this.nomeCidade = nomeCidade;
+        this.nomeCidade = Utilidades.iniciaisMaiuscula(nomeCidade);
         this.uf = uf;
     }
     
     public CidadeBean(String nomeCidade, String uf) {
-        this.nomeCidade = nomeCidade;
+        this.nomeCidade = Utilidades.iniciaisMaiuscula(nomeCidade);
         this.uf = uf;
     }
 
@@ -37,7 +39,7 @@ public class CidadeBean {
     }
 
     public void setNomeCidade(String nomeCidade) {
-        this.nomeCidade = nomeCidade;
+        this.nomeCidade = Utilidades.iniciaisMaiuscula(nomeCidade);
     }
 
     public String getUf() {

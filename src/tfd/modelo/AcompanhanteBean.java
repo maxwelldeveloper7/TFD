@@ -6,6 +6,8 @@
 
 package tfd.modelo;
 
+import tfd.Utilidades.Utilidades;
+
 
 public class AcompanhanteBean {
     private Integer id;
@@ -19,17 +21,17 @@ public class AcompanhanteBean {
 
     public AcompanhanteBean(Integer id, String nome, String rg, String cpf, String endereco) {
         this.id = id;
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
         this.rg = rg;
         this.cpf = cpf;
-        this.endereco = endereco;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
     }
 
     public AcompanhanteBean(String nome, String rg, String cpf, String endereco) {
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
         this.rg = rg;
         this.cpf = cpf;
-        this.endereco = endereco;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
     }
 
     
@@ -47,7 +49,7 @@ public class AcompanhanteBean {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
     }
 
     public String getRg() {
@@ -55,7 +57,7 @@ public class AcompanhanteBean {
     }
 
     public void setRg(String rg) {
-        this.rg = rg;
+        this.rg = rg.toUpperCase();
     }
 
     public String getCpf() {
@@ -71,7 +73,7 @@ public class AcompanhanteBean {
     }
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
     }
     
     

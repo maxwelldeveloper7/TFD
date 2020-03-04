@@ -30,29 +30,28 @@ public class PacienteBean {
     }
 
     public PacienteBean(String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento, String endereco) {
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
         this.cns = cns;
         this.cpf = cpf;
-        this.rg = rg;
+        this.rg = rg.toUpperCase();
         this.telefone = telefone;
-        this.nomePai = nomePai;
-        this.nomeMae = nomeMae;
+        this.nomePai = Utilidades.iniciaisMaiuscula(nomePai);
+        this.nomeMae = Utilidades.iniciaisMaiuscula(nomeMae);
         this.nascimento = nascimento;
-        this.endereco = endereco;
-        this.telefone = telefone;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
     }
 
     public PacienteBean(Integer id, String nome, String cns, String cpf, String rg, String telefone, String nomePai, String nomeMae, Date nascimento, String endereco) {
         this.id = id;
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
         this.cns = cns;
         this.cpf = cpf;
-        this.rg = rg;
+        this.rg = rg.toUpperCase();
         this.telefone = telefone;
-        this.nomePai = nomePai;
-        this.nomeMae = nomeMae;
+        this.nomePai = Utilidades.iniciaisMaiuscula(nomePai);
+        this.nomeMae = Utilidades.iniciaisMaiuscula(nomeMae);
         this.nascimento = nascimento;
-        this.endereco = endereco;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
         
     }
 
@@ -71,7 +70,7 @@ public class PacienteBean {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = Utilidades.iniciaisMaiuscula(nome);
     }
 
     public String getCns() {
@@ -95,7 +94,7 @@ public class PacienteBean {
     }
 
     public void setRg(String rg) {
-        this.rg = rg;
+        this.rg = rg.toUpperCase();
     }
 
     public String getTelefone() {
@@ -111,7 +110,7 @@ public class PacienteBean {
     }
 
     public void setNomePai(String nomePai) {
-        this.nomePai = nomePai;
+        this.nomePai = Utilidades.iniciaisMaiuscula(nomePai);
     }
 
     public String getNomeMae() {
@@ -143,6 +142,6 @@ public class PacienteBean {
     }
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        this.endereco = Utilidades.iniciaisMaiuscula(endereco);
     }    
 }

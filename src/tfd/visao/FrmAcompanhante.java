@@ -36,9 +36,7 @@ import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
 import tfd.daos.AcompanhanteDao;
-import tfd.daos.EspecialidadeDao;
 import tfd.modelo.AcompanhanteBean;
-import tfd.modelo.EspecialidadeBean;
 
 /**
  *
