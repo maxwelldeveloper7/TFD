@@ -309,7 +309,7 @@ public class Utilidades {
             ProcessBuilder pb;
             Process p;
                         //C:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe
-                        //"C:\\Arquivos de programas\\PostgreSQL\\9.1\\bin\\pg_dump.exe "
+            //"C:\\Arquivos de programas\\PostgreSQL\\9.1\\bin\\pg_dump.exe "
             String path = "C:\\Arquivos de programas\\PostgreSQL\\9.1\\bin\\pg_dump.exe ";
             pb = new ProcessBuilder(getPath(), "-h", "localhost", "-p", "5432", "-U", "postgres", "-v", "-f", "C:\\SISGVC\\backups\\" + nomeArquivo + "BKP.sql", "SAC");
             pb.environment().put("PGPASSWORD", "311208");
@@ -327,55 +327,54 @@ public class Utilidades {
      psql -U usuario -d banco < banco.sql
 
      pg_restore -d banco banco.sql*/
-    
-    public static String getPath() throws FileNotFoundException, IOException{
+
+    public static String getPath() throws FileNotFoundException, IOException {
         Properties props = new Properties();
         FileInputStream file = new FileInputStream("./configuracoes.properties");
-        props.load(file); 
+        props.load(file);
         String caminho;
-        
+
         caminho = props.getProperty("path.backup");
-        
+
         System.out.println(caminho);
         return caminho;
     }
-    
-    public static String getHost() throws FileNotFoundException, IOException{
+
+    public static String getHost() throws FileNotFoundException, IOException {
         Properties props = new Properties();
         FileInputStream file = new FileInputStream("./configuracoes.properties");
-        props.load(file);        
+        props.load(file);
         String host;
-        
+
         host = props.getProperty("host");
-        
+
         System.out.println(host);
         return host;
     }
-    
-    public static String formataStringMascara(String texto, String mascara){
+
+    public static String formataStringMascara(String texto, String mascara) {
         MaskFormatter mf;
         String result = "";
         try {
             mf = new MaskFormatter(mascara);
-            mf.setValueContainsLiteralCharacters(false);            
+            mf.setValueContainsLiteralCharacters(false);
             result = mf.valueToString(texto);
         } catch (ParseException ex) {
-            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);            
-        }       
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return result;
     }
-    
+
     public static String iniciaisMaiuscula(String nome) {
-        
+
         String nomeCompleto = "";
 
         //converte toda a string em minúsculo
         nome = nome.toLowerCase();
 
-        
         //laço de repetição para percorrer toda cadeia de caracteres do nome
         for (int i = 0; i < nome.length(); i++) {
-                        
+
             //armazena o caractere para realizar verificações
             String caractere = "";
 
@@ -383,22 +382,22 @@ public class Utilidades {
             if (i == 0) {
                 //armazena o caractere na variável
                 caractere += nome.charAt(i);
-                
+
                 //concatena o primeiro caractere transformado em maiúscolo
                 nomeCompleto += caractere.toUpperCase();
-            
-            //caso contrário
+
+                //caso contrário
             } else {
 
                 //armazena caractere anterior ao indicando pelo ídice
                 String anterior = "";
-                
+
                 //atribui o caractere anterior
                 anterior += nome.charAt(i - 1);
 
                 //verifica se o caractere anterior é um espaço
                 if (anterior.equals(" ")) {
-                    
+
                     //inicializa a variável de preposicão
                     String pre = "";
 
@@ -406,23 +405,33 @@ public class Utilidades {
                     if (i < nome.length() - 3) {
                         //se não ultrapassa atribui à variável pre os 2 próximos caracteres
                         pre += nome.charAt(i);
-                        pre += nome.charAt(i+1);
+                        pre += nome.charAt(i + 1);
                     }
+
+                    //inicaliza variável
+                    boolean abreviacao = true;
                     
+                    //verifica se é o ultimo ou primeiro caractere para não ultrapassar a faixa da string
+                    if (i < nome.length() - 1 && i != 0) {
+                        //verifica se é uma letra cercada por espaços
+                        if (nome.charAt(i - 1) == ' ' && nome.charAt(i + 1) == ' ') {
+                            abreviacao = false;
+                        }
+                    }
+
                     //armazena o caractere na variável
                     caractere += nome.charAt(i);
-                    
+
                     //verifica se os dois próximos caracteres são preposição para mantélos em minúsculo
-                    if(pre.equals("de") || pre.equals("da") || pre.equals("dos") || pre.equals("do") || pre.equals("das")){
+                    if (pre.equals("de") || pre.equals("da") || pre.equals("dos") || pre.equals("do") || pre.equals("das") || !abreviacao) {
                         //concatena o caractere minúsculo ao nome completo
                         nomeCompleto += caractere.toLowerCase();
-                    
-                    //caso contrário converte o caractere para maiúsculo
-                    }else{
-                        //concatena o caractere maiúsculo ao nome completo
+
+                        //caso contrário converte o caractere para maiúsculo
+                    } else {
                         nomeCompleto += caractere.toUpperCase();
                     }
-                //caso contrário apenas concatena o caractere ao nome completo
+                    //caso contrário apenas concatena o caractere ao nome completo
                 } else {
                     nomeCompleto += nome.charAt(i);
                 }
