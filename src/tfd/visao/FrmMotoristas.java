@@ -241,7 +241,7 @@ public class FrmMotoristas extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                
+                resetarFormulario();
             }
 
             @Override

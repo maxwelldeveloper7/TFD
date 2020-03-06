@@ -250,7 +250,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                
+                resetarFormulario();
             }
 
             @Override

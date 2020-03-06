@@ -207,7 +207,7 @@ public class FrmEstabelecimentos extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                
+                resetarFormulario();
             }
 
             @Override

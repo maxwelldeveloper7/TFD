@@ -226,7 +226,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-
+                resetarFormulario();
             }
 
             @Override
@@ -336,7 +336,7 @@ public class FrmProcedimentos extends JDialog implements ActionListener {
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (resposta == 0) {
-            if (new CidadeDao().excluir(Integer.parseInt(txId.getText().trim()))) {
+            if (new ProcedimentoDao().excluir(Integer.parseInt(txId.getText().trim()))) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }

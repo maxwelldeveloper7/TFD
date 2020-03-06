@@ -6,7 +6,13 @@
 
 package tfd.controle;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import tfd.visao.FrmAcompanhante;
 import tfd.visao.FrmCidades;
 import tfd.visao.FrmEspecialidades;
@@ -43,16 +49,16 @@ public class Controle {
     }
     
     public static void inicializar(){
-        /*
-        WindowsLookAndFeel laf = new WindowsClassicLookAndFeel();
+        
+        MetalLookAndFeel laf = new javax.swing.plaf.metal.MetalLookAndFeel();
         try {
             UIManager.setLookAndFeel(laf);
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Falha ao setoar LookAndFell."+
+            JOptionPane.showMessageDialog(null, "Falha ao setar LookAndFell."+
                     "/n"+ex.getMessage()+"/nA aplicação será encerrada.");
             System.exit(0);
-        }*/
+        }       
         abreFrmPrincipal();
     }
     
