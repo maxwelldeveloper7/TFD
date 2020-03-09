@@ -222,8 +222,7 @@ public class Utilidades {
 
         if (str.equals("null")) {
             str = " ";
-        }
-        if (!str.equals("null")) {
+        } else {
             for (int i = 0; i < str.length(); i++) {
                 if (str.charAt(i) == '0') {
                     result = result + str.charAt(i);
@@ -308,7 +307,7 @@ public class Utilidades {
         try {
             ProcessBuilder pb;
             Process p;
-                        //C:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe
+            //C:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe
             //"C:\\Arquivos de programas\\PostgreSQL\\9.1\\bin\\pg_dump.exe "
             String path = "C:\\Arquivos de programas\\PostgreSQL\\9.1\\bin\\pg_dump.exe ";
             pb = new ProcessBuilder(getPath(), "-h", "localhost", "-p", "5432", "-U", "postgres", "-v", "-f", "C:\\SISGVC\\backups\\" + nomeArquivo + "BKP.sql", "SAC");
@@ -410,7 +409,7 @@ public class Utilidades {
 
                     //inicaliza variável
                     boolean abreviacao = true;
-                    
+
                     //verifica se é o ultimo ou primeiro caractere para não ultrapassar a faixa da string
                     if (i < nome.length() - 1 && i != 0) {
                         //verifica se é uma letra cercada por espaços

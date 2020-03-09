@@ -333,7 +333,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                resetarFormulario();
+                //resetarFormulario();
             }
 
             @Override

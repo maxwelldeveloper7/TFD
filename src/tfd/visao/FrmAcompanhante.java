@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URL;
@@ -250,7 +252,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                resetarFormulario();
+                //resetarFormulario();
             }
 
             @Override
@@ -258,10 +260,29 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
                 
             }
         });
+        
+        txCpf.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+               String digitos = Utilidades.getDigitos(txCpf.getText());
+               if(digitos.length() < 11){
+                   JOptionPane.showMessageDialog(null, "Dados incompletos");
+                   txCpf.requestFocus();
+               }else{
+                   JOptionPane.showMessageDialog(null, "pesquisar cpf");
+               }
+               System.out.println(digitos);
+            }
+        });
     }
     
     
-
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
