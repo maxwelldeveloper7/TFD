@@ -72,7 +72,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         setBounds((screenSize.width - 544) / 2, (screenSize.height - 414) / 2, 544, 414);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
-        
+
         //impossibilita edição da tabela
         this.modelo = new DefaultTableModel() {
             @Override
@@ -80,7 +80,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
                 return false;
             }
         };
-        
+
         construirComponentes();
         habilitarCampos(false);
         resetarFormulario();
@@ -149,7 +149,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         pnDados.add(lbAcompanhante);
         txAcompanhante = new JTextField();
         txAcompanhante.setBounds(60, 40, 220, 20);
-        pnDados.add(txAcompanhante);        
+        pnDados.add(txAcompanhante);
 
         lbRg = new JLabel("RG:");
         lbRg.setBounds(300, 20, 20, 20);
@@ -157,32 +157,32 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         txRg = new JTextField();
         txRg.setBounds(300, 40, 100, 20);
         pnDados.add(txRg);
-        
+
         lbCpf = new JLabel("CPF:");
         lbCpf.setBounds(420, 20, 100, 20);
         pnDados.add(lbCpf);
-        
+
         try {
             ftmCpf = new MaskFormatter("###.###.###-##");
             ftmCpf.setValidCharacters("0123456789");
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Falha ao formatar campo:\n" + e.getMessage(), "Falha do Sistema", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txCpf = new JFormattedTextField(ftmCpf);
         txCpf.setFocusLostBehavior(JFormattedTextField.COMMIT);
         txCpf.setColumns(11);
         txCpf.setBounds(420, 40, 100, 20);
         pnDados.add(txCpf);
-        
+
         lbEndereco = new JLabel("Endereço:");
         lbEndereco.setBounds(10, 70, 100, 20);
         pnDados.add(lbEndereco);
-        
+
         txEndereco = new JTextField();
         txEndereco.setBounds(10, 90, 510, 20);
         pnDados.add(txEndereco);
-        
+
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
         pnBotoes.setBounds(4, 342, 530, 38);
@@ -222,32 +222,32 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void windowOpened(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowClosing(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-                 Controle.especialidades = null;
-                 
-                 if(Controle.procedimentos != null){
-                     Controle.procedimentos.carregaCbEspecialidade();
-                     Controle.procedimentos.cbEspecialidade.requestFocus();
-                 }
+                Controle.especialidades = null;
+
+                if (Controle.procedimentos != null) {
+                    Controle.procedimentos.carregaCbEspecialidade();
+                    Controle.procedimentos.cbEspecialidade.requestFocus();
+                }
             }
 
             @Override
             public void windowIconified(WindowEvent e) {
-                
+
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                
+
             }
 
             @Override
@@ -257,32 +257,29 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void windowDeactivated(WindowEvent e) {
-                
+
             }
         });
-        
+
         txCpf.addFocusListener(new FocusListener() {
 
             @Override
             public void focusGained(FocusEvent e) {
-                
+
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-               String digitos = Utilidades.getDigitos(txCpf.getText());
-               if(digitos.length() < 11){
-                   JOptionPane.showMessageDialog(null, "Dados incompletos");
-                   txCpf.requestFocus();
-               }else{
-                   JOptionPane.showMessageDialog(null, "pesquisar cpf");
-               }
-               System.out.println(digitos);
+                System.out.println(txCpf.getText());
+                  
+                if (!txCpf.getText().equals("   .   .   -  ")) {
+                    Utilidades.cpfValido(txCpf.getText());
+                    System.out.println(Utilidades.cpfValido("04960780622"));
+                }
             }
         });
     }
-    
-    
+
     //tratando eventos    
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
@@ -296,9 +293,9 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
-            modelo.setValueAt(""+ acompanhantes.get(i).getRg(), i, 2);
-            modelo.setValueAt(""+ acompanhantes.get(i).getCpf(), i, 3);
-            modelo.setValueAt(""+ acompanhantes.get(i).getEndereco(), i, 4);
+            modelo.setValueAt("" + acompanhantes.get(i).getRg(), i, 2);
+            modelo.setValueAt("" + acompanhantes.get(i).getCpf(), i, 3);
+            modelo.setValueAt("" + acompanhantes.get(i).getEndereco(), i, 4);
         }
     }
 
@@ -326,8 +323,10 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
     private void habilitarCampos(boolean habilitar) {
         txAcompanhante.setEnabled(habilitar);
-        tabela.setEnabled(!habilitar);        
-        if(habilitar)txAcompanhante.requestFocus();
+        tabela.setEnabled(!habilitar);
+        if (habilitar) {
+            txAcompanhante.requestFocus();
+        }
         txRg.setEnabled(habilitar);
         txCpf.setEnabled(habilitar);
         txEndereco.setEnabled(habilitar);
@@ -356,7 +355,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     private void salvar() {
 
         AcompanhanteDao dao = new AcompanhanteDao();
-        
+
         if (dml == 1) {
             AcompanhanteBean a = new AcompanhanteBean(txAcompanhante.getText(), txRg.getText().trim().toUpperCase(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
             if (dao.inserir(a)) {
@@ -370,15 +369,15 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        
+
         resetarFormulario();
     }
 
     private void excluir() {
         AcompanhanteDao dao = new AcompanhanteDao();
-        
+
         int resposta = JOptionPane.showConfirmDialog(this, "Confirma exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
+
         if (resposta == 0) {
             if (dao.excluir(Integer.parseInt(txId.getText().trim()))) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
@@ -432,9 +431,9 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
             resetarFormulario();
         }
     }
-    
+
     private boolean validarFormulario() {
-        if(txAcompanhante.getText().trim().equals("")){
+        if (txAcompanhante.getText().trim().equals("")) {
             txAcompanhante.requestFocus();
             return false;
         }
