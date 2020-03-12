@@ -30,21 +30,10 @@ public class Utilidades {
         return instanciaSingleton;
     }
 
-    /*public static void main (String args[]){
-
-     Utilidades util = Utilidades.getInstancia();
-     //System.out.println(util.formataDataSQL("00/00/2009"));
-
-     System.out.println(util.VenceuDataDeLocacao(4, 7, 2009));
-     }*/
     public static Date formataDataSQL(String str) {
         Date dataSql = null;
         String result = getDigitos(str);
 
-        /*
-         if(result.length() < 8){
-         JOptionPane.showMessageDialog(null, "Data inválida: "+ str);
-         }*/
         if (!result.equals("")) {
             int ano = Integer.parseInt(result.substring(4, 8)) - 1900;
             int mes = Integer.parseInt(result.substring(2, 4)) - 1;
@@ -281,7 +270,7 @@ public class Utilidades {
 
     }
 
-    public static String removeCaracteres(String s, char c) {
+    public static String removeCaractere(String s, char c) {
 
         String r = "";
 
@@ -351,13 +340,19 @@ public class Utilidades {
         return host;
     }
 
-    public static String formataStringMascara(String texto, String mascara) {
+    /**
+     * 
+     * @param digitos - dados obtidos de uma ClasseBean no formato String. Ex: "25051979" data
+     * @param mascara - tipo de máscara. Ex: "##/##/####" 
+     * @return --> 25/05/1979
+     */
+    public static String mascara(String digitos, String mascara) {
         MaskFormatter mf;
         String result = "";
         try {
             mf = new MaskFormatter(mascara);
             mf.setValueContainsLiteralCharacters(false);
-            result = mf.valueToString(texto);
+            result = mf.valueToString(digitos);
         } catch (ParseException ex) {
             Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
         }

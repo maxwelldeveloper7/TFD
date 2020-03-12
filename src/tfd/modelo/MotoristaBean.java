@@ -68,7 +68,7 @@ public class MotoristaBean {
     }
     
     public String getTelefoneMask(){
-        return Utilidades.formataStringMascara(telefone, "(##)#####-####");
+        return Utilidades.mascara(telefone, "(##)#####-####");
     }
 
     public void setTelefone(String telefone) {
