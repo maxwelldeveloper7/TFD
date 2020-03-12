@@ -341,10 +341,11 @@ public class Utilidades {
     }
 
     /**
-     * 
-     * @param digitos - dados obtidos de uma ClasseBean no formato String. Ex: "25051979" data
-     * @param mascara - tipo de máscara. Ex: "##/##/####" 
-     * @return --> 25/05/1979
+     *
+     * @param digitos dados obtidos de uma ClasseBean no formato String. Ex:
+     * "25051979" data
+     * @param mascara tipo de máscara. Ex: "##/##/####"
+     * @return 25/05/1979
      */
     public static String mascara(String digitos, String mascara) {
         MaskFormatter mf;
@@ -435,7 +436,7 @@ public class Utilidades {
     }
 
     public static Boolean cpfValido(String cpf) {
-        boolean valido = true;
+        boolean valido;
 
         //certifica de o parametro cpf conterá apenas digitos numéricos
         cpf = Utilidades.getDigitos(cpf);
@@ -453,9 +454,61 @@ public class Utilidades {
                 || cpf.equals("99999999999")
                 || (cpf.length() != 11)) {
             valido = false;
+            
+            if (cpf.length() < 11) {
+                JOptionPane.showMessageDialog(null, "Número de CPF inválido!\nDeve possuir 11 dígitos!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Número de CPF inválido!\n"+Utilidades.mascara(cpf, "###.###.###-##"), "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+
+            int primeiroDv = Character.getNumericValue(cpf.charAt(9));
+            int segundoDv = Character.getNumericValue(cpf.charAt(10));
+
+            //System.out.println("Primeira validação");
+            int sequencia1 = 10;
+            int resultado = 0;
+            for (int i = 0; i < 9; i++) {
+                resultado += Character.getNumericValue(cpf.charAt(i)) * sequencia1;
+                //System.out.println(Character.getNumericValue(cpf.charAt(i))+" * "+sequencia1);
+
+                sequencia1 = sequencia1 - 1;
+            }
+
+            //System.out.println("Dígitos: "+primeiroDv+segundoDv);
+            //System.out.println("resultado: "+resultado);
+            int restoV1 = (resultado * 10) % 11;
+            if (restoV1 == 10) {
+                restoV1 = 0;
+            }
+
+            //System.out.println("Primeira verificação: Resto = "+restoV1);
+            //System.out.println("Segunda validação");
+            int sequencia2 = 11;
+            resultado = 0;
+            for (int i = 0; i < 10; i++) {
+                resultado += Character.getNumericValue(cpf.charAt(i)) * sequencia2;
+                //System.out.println(Character.getNumericValue(cpf.charAt(i))+" * "+sequencia2);
+
+                sequencia2 = sequencia2 - 1;
+            }
+
+            //System.out.println("Dígitos: "+primeiroDv+segundoDv);
+            //System.out.println("resultado: "+resultado);
+            int restoV2 = (resultado * 10) % 11;
+            if (restoV2 == 10) {
+                restoV2 = 0;
+            }
+
+            //System.out.println("Primeira verificação: Resto = "+restoV2);
+            if ((restoV1 == primeiroDv) && (restoV2 == segundoDv)) {
+                valido = true;
+            } else {
+                valido = false;
+                JOptionPane.showMessageDialog(null, "Número de CPF inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
         }
 
-        
         return valido;
     }
 

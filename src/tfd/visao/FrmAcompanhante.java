@@ -274,7 +274,8 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
                   
                 if (!txCpf.getText().equals("   .   .   -  ")) {
                     Utilidades.cpfValido(txCpf.getText());
-                    System.out.println(Utilidades.cpfValido("04960780622"));
+                }else{
+                    JOptionPane.showMessageDialog(null, "CPF não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });

@@ -1,3 +1,6 @@
+
+import tfd.Utilidades.Utilidades;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,12 +13,10 @@
  */
 public class Teste {
     public static void main(String args[]){
-        Maiuscula m = new Maiuscula();
-        
-        System.out.println(m.caixaAlta("MAXWELL DE OLIVEIRA CHAVES"));
-        System.out.println(m.caixaAlta("MAXWELL DOS SANTOS"));
-        System.out.println(m.caixaAlta("MAXWELL DO AMARAL"));
-        System.out.println(m.caixaAlta("MAXWELL DAS VIRGENS"));
-        System.out.println(m.caixaAlta("maxwell de o. Chaves"));
+        if(Utilidades.cpfValido("04960780622")){
+            System.out.println("CPF válido");
+        }else{
+            System.out.println("CPF inválido");
+        }
     }
 }
