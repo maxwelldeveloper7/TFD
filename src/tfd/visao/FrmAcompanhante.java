@@ -38,6 +38,7 @@ import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
 import tfd.daos.AcompanhanteDao;
+import tfd.daos.PacienteDao;
 import tfd.modelo.AcompanhanteBean;
 
 /**
@@ -49,7 +50,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     //Declarando componentes
     private TitledBorder bordaTabela, bordaDados;
     private JPanel pnTabela, pnFundo, pnBotoes, pnDados;
-    private JButton btInserir, btEditar, btSalvar, btCancelar, btExcluir;
+    private JButton btMostrarTodos, btPesquisar, btInserir, btEditar, btSalvar, btCancelar, btExcluir;
     private JTextField txId, txAcompanhante, txRg, txEndereco;
     private JLabel lbId, lbAcompanhante, lbRg, lbCpf, lbEndereco;
     private JFormattedTextField txCpf;
@@ -69,7 +70,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);//objeto imagem
         setIconImage(iconeTitulo);//define uma imagem para o icone
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();//pega a dimensão da tela
-        setBounds((screenSize.width - 544) / 2, (screenSize.height - 414) / 2, 544, 414);//define o tamanho da janela e posiciona ao centro
+        setBounds((screenSize.width - 544) / 2, (screenSize.height - 454) / 2, 544, 454);//define o tamanho da janela e posiciona ao centro
         setResizable(false);//impossibilita redimencionamento
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//define ação ao fechar janela.
 
@@ -88,9 +89,16 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
     //Inicializando, definindo e posicionando componentes
     private void construirComponentes() {
+        
+        btMostrarTodos = new JButton("Mostrar Todos", new ImageIcon(getClass().getResource("/tfd/visao/mostrartodos.png")));
+        btMostrarTodos.setBounds(5, 6, 145, 30);
+
+        btPesquisar = new JButton("Pesquisar", new ImageIcon(getClass().getResource("/tfd/visao/pesquisar.png")));
+        btPesquisar.setBounds(155, 6, 145, 30);
+
         //painel que conterá a tabela
         pnTabela = new JPanel(null);
-        pnTabela.setBounds(4, 4, 530, 200);
+        pnTabela.setBounds(4, 43, 530, 200);
         bordaTabela = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Listagem de Acompanhantes");
         pnTabela.setBorder(bordaTabela);
 
@@ -131,7 +139,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
         //Painel que conterá o formulário de dados
         pnDados = new JPanel(null);
-        pnDados.setBounds(4, 208, 530, 130);
+        pnDados.setBounds(4, 248, 530, 130);
         bordaDados = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Dados");
         pnDados.setBorder(bordaDados);
 
@@ -185,7 +193,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
         //Construindo painel de botões
         pnBotoes = new JPanel(new FlowLayout());
-        pnBotoes.setBounds(4, 342, 530, 38);
+        pnBotoes.setBounds(4, 382, 530, 38);
 
         //Contruindo botões
         btInserir = new JButton("Inserir", new ImageIcon(getClass().getResource("/tfd/visao/inserir.png")));
@@ -206,6 +214,8 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         pnBotoes.setBackground(Color.white);
 
         pnFundo = new JPanel(null);
+        pnFundo.add(btMostrarTodos);
+        pnFundo.add(btPesquisar);
         pnFundo.add(pnTabela);
         pnFundo.add(pnDados);
         pnFundo.add(pnBotoes);
@@ -213,6 +223,8 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         getContentPane().add(pnFundo);
 
         //registrando eventos
+        btMostrarTodos.addActionListener(this);
+        btPesquisar.addActionListener(this);
         btInserir.addActionListener(this);
         btEditar.addActionListener(this);
         btExcluir.addActionListener(this);
@@ -282,7 +294,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     }
 
     //tratando eventos    
-    private void pesquisar(DefaultTableModel modelo) {
+    private void listar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         AcompanhanteDao dao = new AcompanhanteDao();
 
@@ -295,9 +307,33 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
             modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
             modelo.setValueAt("" + acompanhantes.get(i).getRg(), i, 2);
-            modelo.setValueAt("" + acompanhantes.get(i).getCpf(), i, 3);
+            modelo.setValueAt("" + Utilidades.mascara(acompanhantes.get(i).getCpf(),"###.###.###-##"), i, 3);
             modelo.setValueAt("" + acompanhantes.get(i).getEndereco(), i, 4);
         }
+    }
+    
+    private void pesquisar(DefaultTableModel modelo) {
+        modelo.setNumRows(0);
+        PacienteDao dao = new PacienteDao();
+/*
+        pacientes = dao.listar(Utilidades.iniciaisMaiuscula(nomeParaPesquisar));
+
+        String[] campos = {null, null, null, null, null};
+
+        for (int i = 0; i < pacientes.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+        }
+        
+        if (pacientes.isEmpty()){
+            modelo.addRow(campos);
+            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+        }
+        nomeParaPesquisar = null;*/
     }
 
     private void linhaSelecionadaTabela() {
@@ -341,9 +377,10 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         habilitarCampos(false);
-        acompanhantes = null;
+        //acompanhantes = null;
         dml = null;
-        pesquisar(modelo);
+        //pesquisar(modelo);
+        tabela.clearSelection();
         btInserir.requestFocus();
     }
 
@@ -412,6 +449,24 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btMostrarTodos) {
+            listar(modelo);
+            System.out.println("listar");
+        }
+
+        if (e.getSource() == btPesquisar) {
+            /*nomeParaPesquisar = "";
+            nomeParaPesquisar = JOptionPane.showInputDialog(this, "Informe o nome do Paciente:");
+            if (nomeParaPesquisar != null && !nomeParaPesquisar.isEmpty()) {
+                pesquisar(modelo);
+            } else {
+                if (nomeParaPesquisar != null) {
+                    JOptionPane.showMessageDialog(this, "Você precisa informar o nome do paciente!", "Mensagem do Sistema", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }*/
+
+        }
+        
         if (e.getSource() == btInserir) {
             inserir();
         }

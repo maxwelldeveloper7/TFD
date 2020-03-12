@@ -356,9 +356,9 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + pacientes.get(i).getCns(), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
             modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + pacientes.get(i).getCpf(), i, 4);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
         }
     }
 
@@ -366,7 +366,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
         modelo.setNumRows(0);
         PacienteDao dao = new PacienteDao();
 
-        pacientes = dao.listar(nomeParaPesquisar);
+        pacientes = dao.listar(Utilidades.iniciaisMaiuscula(nomeParaPesquisar));
 
         String[] campos = {null, null, null, null, null};
 
@@ -374,9 +374,9 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + pacientes.get(i).getCns(), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
             modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + pacientes.get(i).getCpf(), i, 4);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
         }
         
         if (pacientes.isEmpty()){
