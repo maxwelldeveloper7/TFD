@@ -60,7 +60,8 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     private JScrollPane barraRolagem;
     private List<AcompanhanteBean> acompanhantes;
     public Integer dml;
-    private MaskFormatter ftmCpf;
+    private MaskFormatter ftmCpf;    
+    private String nomeParaPesquisar;
 
     //Método construtor
     public FrmAcompanhante(JFrame parent, boolean modal) {
@@ -282,10 +283,19 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void focusLost(FocusEvent e) {
-                System.out.println(txCpf.getText());
-                  
                 if (!txCpf.getText().equals("   .   .   -  ")) {
-                    Utilidades.cpfValido(txCpf.getText());
+                    
+                    if(Utilidades.cpfValido(txCpf.getText()) ){
+                        System.out.println(dml);
+                        if(dml == 1){
+                            AcompanhanteDao dao = new AcompanhanteDao();
+                            AcompanhanteBean a;
+                            a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
+                            if(a.getCpf() != null){
+                                JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
+                            }
+                        }
+                    }
                 }else{
                     JOptionPane.showMessageDialog(null, "CPF não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
@@ -314,26 +324,26 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     
     private void pesquisar(DefaultTableModel modelo) {
         modelo.setNumRows(0);
-        PacienteDao dao = new PacienteDao();
-/*
-        pacientes = dao.listar(Utilidades.iniciaisMaiuscula(nomeParaPesquisar));
+        AcompanhanteDao dao = new AcompanhanteDao();
+
+        acompanhantes = dao.listar(Utilidades.iniciaisMaiuscula(nomeParaPesquisar));
 
         String[] campos = {null, null, null, null, null};
 
-        for (int i = 0; i < pacientes.size(); i++) {
+        for (int i = 0; i < acompanhantes.size(); i++) {
             modelo.addRow(campos);
-            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
-            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
-            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+            modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + acompanhantes.get(i).getRg(), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(acompanhantes.get(i).getCpf(),"###.###.###-##"), i, 3);
+            modelo.setValueAt("" + acompanhantes.get(i).getEndereco(), i, 4);
         }
         
-        if (pacientes.isEmpty()){
+        if (acompanhantes.isEmpty()){
             modelo.addRow(campos);
             modelo.setValueAt("Nenhum registro encontrado!",0,1);
         }
-        nomeParaPesquisar = null;*/
+        nomeParaPesquisar = null;
     }
 
     private void linhaSelecionadaTabela() {
@@ -451,19 +461,18 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btMostrarTodos) {
             listar(modelo);
-            System.out.println("listar");
         }
 
         if (e.getSource() == btPesquisar) {
-            /*nomeParaPesquisar = "";
-            nomeParaPesquisar = JOptionPane.showInputDialog(this, "Informe o nome do Paciente:");
+            nomeParaPesquisar = "";
+            nomeParaPesquisar = JOptionPane.showInputDialog(this, "Informe o nome do acompanhante:");
             if (nomeParaPesquisar != null && !nomeParaPesquisar.isEmpty()) {
                 pesquisar(modelo);
             } else {
                 if (nomeParaPesquisar != null) {
-                    JOptionPane.showMessageDialog(this, "Você precisa informar o nome do paciente!", "Mensagem do Sistema", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Você precisa informar o nome do acompanhante!", "Mensagem do Sistema", JOptionPane.INFORMATION_MESSAGE);
                 }
-            }*/
+            }
 
         }
         
