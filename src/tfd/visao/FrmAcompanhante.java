@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -38,7 +39,6 @@ import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
 import tfd.daos.AcompanhanteDao;
-import tfd.daos.PacienteDao;
 import tfd.modelo.AcompanhanteBean;
 
 /**
@@ -265,7 +265,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
             @Override
             public void windowActivated(WindowEvent e) {
-                //resetarFormulario();
+                
             }
 
             @Override
@@ -286,13 +286,14 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
                 if (!txCpf.getText().equals("   .   .   -  ")) {
                     
                     if(Utilidades.cpfValido(txCpf.getText()) ){
-                        System.out.println(dml);
                         if(dml == 1){
                             AcompanhanteDao dao = new AcompanhanteDao();
                             AcompanhanteBean a;
                             a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
                             if(a.getCpf() != null){
                                 JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
+                                resetarFormulario();
+                                pesquisarPorCpf(modelo, a.getCpf());
                             }
                         }
                     }
@@ -305,7 +306,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
 
     //tratando eventos    
     private void listar(DefaultTableModel modelo) {
-        modelo.setNumRows(0);
+        modelo.setRowCount(0);
         AcompanhanteDao dao = new AcompanhanteDao();
 
         acompanhantes = dao.listar();
@@ -322,11 +323,37 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
         }
     }
     
-    private void pesquisar(DefaultTableModel modelo) {
-        modelo.setNumRows(0);
+    private void pesquisarPorNome(DefaultTableModel modelo) {
+        modelo.setRowCount(0);
         AcompanhanteDao dao = new AcompanhanteDao();
 
         acompanhantes = dao.listar(Utilidades.iniciaisMaiuscula(nomeParaPesquisar));
+
+        String[] campos = {null, null, null, null, null};
+
+        for (int i = 0; i < acompanhantes.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(acompanhantes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + acompanhantes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + acompanhantes.get(i).getRg(), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(acompanhantes.get(i).getCpf(),"###.###.###-##"), i, 3);
+            modelo.setValueAt("" + acompanhantes.get(i).getEndereco(), i, 4);
+        }
+        
+        if (acompanhantes.isEmpty()){
+            modelo.addRow(campos);
+            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+        }
+        nomeParaPesquisar = null;
+    }
+    
+    private void pesquisarPorCpf(DefaultTableModel modelo, String cpf) {
+        modelo.setRowCount(0);
+        AcompanhanteDao dao = new AcompanhanteDao();               
+        acompanhantes = new ArrayList<>();
+        System.out.println(acompanhantes);
+        
+        acompanhantes.add(dao.pesquisarCpf(cpf));
 
         String[] campos = {null, null, null, null, null};
 
@@ -415,6 +442,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
             AcompanhanteBean a = new AcompanhanteBean(Integer.parseInt(txId.getText()), txAcompanhante.getText(), txRg.getText().trim().toUpperCase(), Utilidades.getDigitos(txCpf.getText()), txEndereco.getText().trim());
             if (dao.alterar(a)) {
                 JOptionPane.showMessageDialog(this, "Registro atualizado com sucesso!", "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+                modelo.setRowCount(0);
             }
         }
 
@@ -467,7 +495,7 @@ public class FrmAcompanhante extends JDialog implements ActionListener {
             nomeParaPesquisar = "";
             nomeParaPesquisar = JOptionPane.showInputDialog(this, "Informe o nome do acompanhante:");
             if (nomeParaPesquisar != null && !nomeParaPesquisar.isEmpty()) {
-                pesquisar(modelo);
+                pesquisarPorNome(modelo);
             } else {
                 if (nomeParaPesquisar != null) {
                     JOptionPane.showMessageDialog(this, "Você precisa informar o nome do acompanhante!", "Mensagem do Sistema", JOptionPane.INFORMATION_MESSAGE);
