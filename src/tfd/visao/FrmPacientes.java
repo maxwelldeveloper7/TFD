@@ -7,10 +7,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -35,7 +38,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
+import tfd.daos.AcompanhanteDao;
 import tfd.daos.PacienteDao;
+import tfd.modelo.AcompanhanteBean;
 import tfd.modelo.PacienteBean;
 
 /**
@@ -341,6 +346,36 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             }
         });
+        
+        txCpf.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!txCpf.getText().equals("   .   .   -  ")) {
+                    
+                    if(Utilidades.cpfValido(txCpf.getText()) ){
+                        if(dml == 1){
+                            AcompanhanteDao dao = new AcompanhanteDao();
+                            AcompanhanteBean a;
+                            a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
+                            if(a.getCpf() != null){
+                                JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
+                                resetarFormulario();
+                                pesquisarPorCpf(modelo, a.getCpf());
+                            }
+                        }
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "CPF não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    txCpf.requestFocus();
+                }
+            }
+        });
     }
 
     //tratando eventos    
@@ -403,6 +438,32 @@ public class FrmPacientes extends JDialog implements ActionListener {
             habilitarEdicaoExclusao(false);
             limparDados();
         }
+    }
+    
+    private void pesquisarPorCpf(DefaultTableModel modelo, String cpf) {
+        modelo.setRowCount(0);
+        PacienteDao dao = new PacienteDao();               
+        pacientes = new ArrayList<>();
+        System.out.println(pacientes);
+        
+        pacientes.add(dao.pesquisarCpf(cpf));
+
+        String[] campos = {null, null, null, null, null};
+
+        for (int i = 0; i < pacientes.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+        }
+        
+        if (pacientes.isEmpty()){
+            modelo.addRow(campos);
+            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+        }
+        nomeParaPesquisar = null;
     }
 
     private void limparDados() {
