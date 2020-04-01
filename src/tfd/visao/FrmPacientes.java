@@ -346,7 +346,7 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
             }
         });
-        
+
         txCpf.addFocusListener(new FocusListener() {
 
             @Override
@@ -357,20 +357,21 @@ public class FrmPacientes extends JDialog implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (!txCpf.getText().equals("   .   .   -  ")) {
-                    
-                    if(Utilidades.cpfValido(txCpf.getText()) ){
-                        if(dml == 1){
-                            AcompanhanteDao dao = new AcompanhanteDao();
-                            AcompanhanteBean a;
-                            a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
-                            if(a.getCpf() != null){
-                                JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
-                                resetarFormulario();
-                                pesquisarPorCpf(modelo, a.getCpf());
-                            }
+
+                    if (Utilidades.cpfValido(txCpf.getText())) {
+
+                        AcompanhanteDao dao = new AcompanhanteDao();
+                        AcompanhanteBean a;
+                        a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
+                        if (a.getCpf() != null) {
+                            JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
+                            resetarFormulario();
+                            pesquisarPorCpf(modelo, a.getCpf());
                         }
+                    }else{
+                        txCpf.requestFocus();
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "CPF não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     txCpf.requestFocus();
                 }
@@ -391,9 +392,9 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(), "###  ####  ####  ####"), i, 2);
             modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(), "###.###.###-##"), i, 4);
         }
     }
 
@@ -409,14 +410,14 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(), "  ###  ####  ####  ####"), i, 2);
             modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(), "###.###.###-##"), i, 4);
         }
-        
-        if (pacientes.isEmpty()){
+
+        if (pacientes.isEmpty()) {
             modelo.addRow(campos);
-            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+            modelo.setValueAt("Nenhum registro encontrado!", 0, 1);
         }
         nomeParaPesquisar = null;
     }
@@ -439,13 +440,13 @@ public class FrmPacientes extends JDialog implements ActionListener {
             limparDados();
         }
     }
-    
+
     private void pesquisarPorCpf(DefaultTableModel modelo, String cpf) {
         modelo.setRowCount(0);
-        PacienteDao dao = new PacienteDao();               
+        PacienteDao dao = new PacienteDao();
         pacientes = new ArrayList<>();
         System.out.println(pacientes);
-        
+
         pacientes.add(dao.pesquisarCpf(cpf));
 
         String[] campos = {null, null, null, null, null};
@@ -454,14 +455,14 @@ public class FrmPacientes extends JDialog implements ActionListener {
             modelo.addRow(campos);
             modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
             modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(),"  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(), "  ###  ####  ####  ####"), i, 2);
             modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
-            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(),"###.###.###-##"), i, 4);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(), "###.###.###-##"), i, 4);
         }
-        
-        if (pacientes.isEmpty()){
+
+        if (pacientes.isEmpty()) {
             modelo.addRow(campos);
-            modelo.setValueAt("Nenhum registro encontrado!",0,1);
+            modelo.setValueAt("Nenhum registro encontrado!", 0, 1);
         }
         nomeParaPesquisar = null;
     }
