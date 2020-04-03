@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import tfd.modelo.AcompanhanteBean;
 import tfd.modelo.PacienteBean;
 
 /**
@@ -110,7 +109,34 @@ public class PacienteDao extends GenericDAO{
                 a.setEndereco(rs.getString("enderecopa"));
             }
         } catch (SQLException e) {
-            System.out.println("Falha ao listar acompanhantes; "+e.getMessage());
+            System.out.println("Falha ao listar pacientes; "+e.getMessage());
+        }        
+        return a;
+    }
+    
+    public PacienteBean pesquisarCns(String cns){
+        String sql = "SELECT * FROM pacientes WHERE cns = ?";
+        PacienteBean a = new PacienteBean();
+        try {
+            pstm = ConexaoPostgres.conectar().prepareStatement(sql);
+            pstm.setString(1,cns);
+            rs = pstm.executeQuery();
+            
+            while (rs.next()) {                
+                
+                a.setId(rs.getInt("id"));
+                a.setNome(rs.getString("nomepa"));
+                a.setCns(rs.getString("cns"));
+                a.setRg(rs.getString("rgpa"));
+                a.setCpf(rs.getString("cpfpa"));
+                a.setNascimento(rs.getDate("dtnascimento"));
+                a.setNomePai(rs.getString("paipa"));
+                a.setNomeMae(rs.getString("maepa"));
+                a.setTelefone(rs.getString("telefonepa"));
+                a.setEndereco(rs.getString("enderecopa"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Falha ao listar pacientes; "+e.getMessage());
         }        
         return a;
     }

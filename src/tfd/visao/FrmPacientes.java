@@ -40,7 +40,6 @@ import tfd.Utilidades.Utilidades;
 import tfd.controle.Controle;
 import tfd.daos.AcompanhanteDao;
 import tfd.daos.PacienteDao;
-import tfd.modelo.AcompanhanteBean;
 import tfd.modelo.PacienteBean;
 
 /**
@@ -360,10 +359,10 @@ public class FrmPacientes extends JDialog implements ActionListener {
 
                     if (Utilidades.cpfValido(txCpf.getText())) {
 
-                        AcompanhanteDao dao = new AcompanhanteDao();
-                        AcompanhanteBean a;
+                        PacienteDao dao = new PacienteDao();
+                        PacienteBean a;
                         a = dao.pesquisarCpf(Utilidades.getDigitos(txCpf.getText()));
-                        if (a.getCpf() != null) {
+                        if (a.getCpf() != null && dml == 1) {
                             JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
                             resetarFormulario();
                             pesquisarPorCpf(modelo, a.getCpf());
@@ -374,6 +373,36 @@ public class FrmPacientes extends JDialog implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                     txCpf.requestFocus();
+                }
+            }
+        });
+        
+        txCartaoSus.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(!txCartaoSus.getText().trim().equals("")){
+                     if (Utilidades.cnsValido(txCartaoSus.getText())) {
+
+                        PacienteDao dao = new PacienteDao();
+                        PacienteBean a;
+                        a = dao.pesquisarCns(Utilidades.getDigitos(txCartaoSus.getText()));
+                        if (a.getCns() != null && dml == 1) {
+                            JOptionPane.showMessageDialog(null, "CNS já cadastrado!");
+                            resetarFormulario();
+                            pesquisarPorCns(modelo, a.getCns());
+                        }
+                    }else{
+                        txCartaoSus.requestFocus();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "CNS não informado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    txCartaoSus.requestFocus();
                 }
             }
         });
@@ -448,6 +477,32 @@ public class FrmPacientes extends JDialog implements ActionListener {
         System.out.println(pacientes);
 
         pacientes.add(dao.pesquisarCpf(cpf));
+
+        String[] campos = {null, null, null, null, null};
+
+        for (int i = 0; i < pacientes.size(); i++) {
+            modelo.addRow(campos);
+            modelo.setValueAt(pacientes.get(i).getId() + "  ", i, 0);
+            modelo.setValueAt("  " + pacientes.get(i).getNome(), i, 1);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCns(), "  ###  ####  ####  ####"), i, 2);
+            modelo.setValueAt("" + pacientes.get(i).getRg(), i, 3);
+            modelo.setValueAt("" + Utilidades.mascara(pacientes.get(i).getCpf(), "###.###.###-##"), i, 4);
+        }
+
+        if (pacientes.isEmpty()) {
+            modelo.addRow(campos);
+            modelo.setValueAt("Nenhum registro encontrado!", 0, 1);
+        }
+        nomeParaPesquisar = null;
+    }
+    
+    private void pesquisarPorCns(DefaultTableModel modelo, String cns) {
+        modelo.setRowCount(0);
+        PacienteDao dao = new PacienteDao();
+        pacientes = new ArrayList<>();
+        System.out.println(pacientes);
+
+        pacientes.add(dao.pesquisarCns(cns));
 
         String[] campos = {null, null, null, null, null};
 

@@ -511,5 +511,37 @@ public class Utilidades {
 
         return valido;
     }
+    
+    public static Boolean cnsValido(String cns) {
+        boolean valido;
+
+        //certifica de o parametro cpf conterá apenas digitos numéricos
+        cns = Utilidades.getDigitos(cns);
+
+        //considera erro CPF's formados por uma sequencia de numeros iguais
+        if (cns.equals("000000000000000")
+                || cns.equals("111111111111111")
+                || cns.equals("222222222222222")
+                || cns.equals("333333333333333")
+                || cns.equals("444444444444444")
+                || cns.equals("555555555555555")
+                || cns.equals("666666666666666")
+                || cns.equals("777777777777777")
+                || cns.equals("888888888888888")
+                || cns.equals("999999999999999")
+                || (cns.length() != 15)) {
+            valido = false;
+            
+            if (cns.length() < 15) {
+                JOptionPane.showMessageDialog(null, "Número de CNS inválido!\nDeve possuir 15 dígitos!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Número de CNS inválido!\n"+Utilidades.mascara(cns, "  ###  ####  ####  ####"), "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            valido = true;
+        }
+
+        return valido;
+    }
 
 }
